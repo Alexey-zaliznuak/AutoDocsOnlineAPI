@@ -1,2 +1,2 @@
 # AutoDocsOnlineAPI
-![Main workflow](https://github.com/Alexey-zaliznuak/AutoDocsOnlineAPI/actions/workflows/main/badge.svg)
+![Main workflow](https://github.com/Alexey-zaliznuak/AutoDocsOnlineAPI/actions/workflows/main.yml/badge.svg)
