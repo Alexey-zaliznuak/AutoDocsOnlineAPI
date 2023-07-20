@@ -6,10 +6,23 @@ from django.utils.translation import gettext_lazy as _
 
 
 class User(AbstractUser):
+    username = models.CharField(
+        _('username'),
+        max_length=150,
+        primary_key=True,
+        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        validators=[AbstractUser.username_validator],
+        error_messages={
+            'unique': _("A user with that username already exists."),
+        },
+    )
     email = models.EmailField(
         _('email address'),
         max_length=settings.USER_EMAIL_MAX_LENGTH,
-        unique=True
+        unique=True,
+        error_messages={
+            'unique': _("A user with that email already exists."),
+        },
     )
     email_confirmed = models.BooleanField(_("email confirmed"), default=False)
     confirmation_code = models.CharField(
@@ -27,9 +40,9 @@ class User(AbstractUser):
             self.email_confirmed = True
 
     class Meta:
-        ordering = ["-id"]
+        ordering = ["username"]
         verbose_name = 'User'
         verbose_name_plural = "Users"
 
     def __str__(self) -> str:
-        return self.email + " " + self.username + " " + str(self.pk)
+        return ' '.join([self.username, self.email])
