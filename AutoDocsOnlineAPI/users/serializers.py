@@ -1,7 +1,9 @@
 from django.conf import settings
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from rest_framework import serializers
 
 from .models import User
@@ -18,7 +20,19 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 
-class SignUpSerializer(serializers.ModelSerializer):
+class SignUpSerializer(serializers.Serializer):
+    username = serializers.CharField(
+        validators=(UnicodeUsernameValidator,),
+        max_length=settings.USER_USERNAME_MAX_LENGTH
+    )
+    email = serializers.EmailField(max_length=settings.USER_EMAIL_MAX_LENGTH)
+    first_name = serializers.CharField(
+        max_length=settings.USER_FIRST_NAME_MAX_LENGTH
+    )
+    last_name = serializers.CharField(
+        max_length=settings.USER_LAST_NAME_MAX_LENGTH
+    )
+
     class Meta:
         model = User
         fields = (
@@ -40,21 +54,28 @@ class SignUpSerializer(serializers.ModelSerializer):
         return make_password(value)
 
     def validate(self, data):
-        q = User.objects.filter(username=data['username'])
+        """
+        Default validate but delete accounts with same email/username
+        if they have not confirmed their email address.
+        This is useful if you used the registration
+        but realized that you entered an incorrect address and/or username.
+        """
+        error = 'User with this {} already register and confirm email'
+        username = data['username']
+        email = data['email']
 
+        if User.objects.filter(
+            username=username,
+            email_confirmed=True
+        ).exists():
+            raise ValidationError(error.format('username'))
+
+        if User.objects.filter(email=email, email_confirmed=True).exists():
+            raise ValidationError(error.format('email'))
+
+        q = User.objects.filter(Q(username=username) | Q(email=data['email']))
         if q.exists():
-            user = q.get()
-
-            if user.email_confirmed:
-                raise ValidationError(
-                    'User with this username already register'
-                    'and confirm email'
-                )
-
-            raise ValidationError(
-                'User with this username already register '
-                'but not confirmed email'
-            )
+            q.delete()
 
         return super().validate(data)
 
