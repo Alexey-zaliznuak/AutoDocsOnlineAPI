@@ -8,13 +8,26 @@ from django.utils.translation import gettext_lazy as _
 class User(AbstractUser):
     username = models.CharField(
         _('username'),
-        max_length=150,
+        max_length=settings.USER_USERNAME_MAX_LENGTH,
         primary_key=True,
-        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        help_text=_(
+            'Required. 150 characters or fewer. '
+            'Letters, digits and @/./+/-/_ only.'
+        ),
         validators=[AbstractUser.username_validator],
         error_messages={
             'unique': _("A user with that username already exists."),
         },
+    )
+    first_name = models.CharField(
+        _('first name'),
+        max_length=settings.USER_FIRST_NAME_MAX_LENGTH,
+        blank=True
+    )
+    last_name = models.CharField(
+        _('last name'),
+        max_length=settings.USER_LAST_NAME_MAX_LENGTH,
+        blank=True
     )
     email = models.EmailField(
         _('email address'),
@@ -24,6 +37,7 @@ class User(AbstractUser):
             'unique': _("A user with that email already exists."),
         },
     )
+
     email_confirmed = models.BooleanField(_("email confirmed"), default=False)
     confirmation_code = models.CharField(
         _("confirm code"),
@@ -36,8 +50,13 @@ class User(AbstractUser):
         if self.username == 'me':
             raise ValidationError('uncorrect username')
 
+        return super().clean()
+
+    def save(self, *args, **kwargs) -> None:
         if self.is_staff:
             self.email_confirmed = True
+
+        return super().save(*args, **kwargs)
 
     class Meta:
         ordering = ["username"]
