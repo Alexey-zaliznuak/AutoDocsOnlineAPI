@@ -46,6 +46,11 @@ class User(AbstractUser):
         null=True,
     )
 
+    class Meta:
+        ordering = ["username"]
+        verbose_name = 'User'
+        verbose_name_plural = "Users"
+
     def clean(self) -> None:
         if self.username == 'me':
             raise ValidationError('uncorrect username')
@@ -57,11 +62,6 @@ class User(AbstractUser):
             self.email_confirmed = True
 
         return super().save(*args, **kwargs)
-
-    class Meta:
-        ordering = ["username"]
-        verbose_name = 'User'
-        verbose_name_plural = "Users"
 
     def __str__(self) -> str:
         return ' '.join([self.username, self.email])
