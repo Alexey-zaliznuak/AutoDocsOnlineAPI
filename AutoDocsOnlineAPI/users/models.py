@@ -9,7 +9,7 @@ class User(AbstractUser):
     username = models.CharField(
         _('username'),
         max_length=settings.USER_USERNAME_MAX_LENGTH,
-        primary_key=True,
+        unique=True,
         help_text=_(
             'Required. 150 characters or fewer. '
             'Letters, digits and @/./+/-/_ only.'
