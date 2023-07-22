@@ -1,3 +1,5 @@
+import uuid
+
 from django.conf import settings
 from django.db import models
 
@@ -5,10 +7,11 @@ from .validators import name_in_document_validator
 
 
 class Template(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     title = models.CharField(
         "title",
         max_length=settings.TEMPLATE_TITLE_MAX_LENGTH,
-        primary_key=True
+        unique=True
     )
     name_in_document = models.CharField(
         "template name in document",
