@@ -52,7 +52,7 @@ class Template(models.Model):
         return self.title
 
 
-class UserTemplateValue(models.Model):
+class DefaultUserTemplateValue(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         User,
@@ -72,11 +72,11 @@ class UserTemplateValue(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=('user', 'template'),
-                name='user_template_unique'
+                name='default_user_template_unique'
             )
         ]
-        verbose_name = 'UserTemplateValue'
-        verbose_name_plural = "UserTemplateValues"
+        verbose_name = 'DefaultUserTemplateValue'
+        verbose_name_plural = "DeafaultUserTemplateValues"
 
     def __str__(self):
         short_length = settings.USER_TEMPLATE_VALUE_SHORT_VALUE_LENGTH
