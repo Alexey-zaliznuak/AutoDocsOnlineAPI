@@ -7,7 +7,7 @@ from .models import User
 
 @admin.register(User)
 class MyUserAdmin(UserAdmin):
-    list_display = ('username', 'email', 'is_staff', 'pk', 'email_confirmed')
+    list_display = ('username', 'email', 'documents', 'pk', 'email_confirmed')
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {
@@ -27,3 +27,7 @@ class MyUserAdmin(UserAdmin):
             'fields': ('username', 'email', 'password1', 'password2'),
         }),
     )
+
+    @admin.display(empty_value='unknown', description="documents")
+    def documents(self, user):
+        return '\n'.join(map(str, user.document.all()))

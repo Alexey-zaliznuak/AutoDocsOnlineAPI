@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.validators import MinLengthValidator
 from django.db import models
 
-from core.utils import make_documents_directory_path
+from core.utils import make_documents_directory_path, short
 from users.models import User
 
 from .validators import name_in_document_validator
@@ -81,12 +81,8 @@ class DefaultUserTemplateValue(models.Model):
         verbose_name_plural = "DeafaultUserTemplateValues"
 
     def __str__(self):
-        short_length = settings.USER_TEMPLATE_VALUE_SHORT_VALUE_LENGTH
-
-        value = (
-            self.value[:short_length] + '...'
-            if len(self.value) > short_length
-            else self.value
+        value = short(
+            self.value, settings.USER_TEMPLATE_VALUE_SHORT_VALUE_LENGTH
         )
         return ' '.join(map(str, [self.user, self.template, value]))
 
@@ -125,4 +121,4 @@ class Document(models.Model):
         verbose_name_plural = "Documents"
 
     def __str__(self):
-        return self.title
+        return short(self.title, settings.DOCUMENT_TITLE_SHORT_LENGTH)

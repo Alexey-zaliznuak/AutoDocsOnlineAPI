@@ -142,6 +142,7 @@ class AUTHApiView(viewsets.ViewSet):
 
         user.confirmation_code = make_confirm_code()
         send_confirm_code(user)
+        user.save()
 
         return Response(request.data, status=status.HTTP_200_OK)
 

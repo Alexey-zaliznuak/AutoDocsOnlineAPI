@@ -33,6 +33,7 @@ class SignUpSerializer(serializers.Serializer):
     last_name = serializers.CharField(
         max_length=settings.USER_LAST_NAME_MAX_LENGTH
     )
+    password = serializers.CharField()
 
     class Meta:
         model = User
