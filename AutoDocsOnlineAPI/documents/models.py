@@ -110,3 +110,19 @@ class Document(models.Model):
     file = models.FileField(
         upload_to=make_documents_directory_path,
     )
+    pub_date = models.DateTimeField(
+        'date of publication', auto_now_add=True
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=('author', 'title'),
+                name='author_title_unique'
+            )
+        ]
+        verbose_name = 'Document'
+        verbose_name_plural = "Documents"
+
+    def __str__(self):
+        return self.title
