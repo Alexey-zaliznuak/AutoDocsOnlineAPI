@@ -7,7 +7,7 @@ from .validators import name_in_document_validator
 
 
 class Template(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(
         "title",
         max_length=settings.TEMPLATE_TITLE_MAX_LENGTH,
