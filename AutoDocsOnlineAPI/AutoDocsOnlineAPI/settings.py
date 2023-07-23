@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
@@ -32,6 +33,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -61,7 +65,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'AutoDocsOnlineAPI.wsgi.application'
 
-CORS_ORIGIN_WHITELIST = env('CORS_ORIGIN_WHITELIST', '*').split(',')
+CORS_ORIGIN_WHITELIST = ['http://localhost:3001']
 
 
 # Use sql in debug mode and postgers in production(on server)
