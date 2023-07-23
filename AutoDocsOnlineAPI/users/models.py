@@ -3,6 +3,7 @@ import uuid
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import MinLengthValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -17,7 +18,10 @@ class User(AbstractUser):
             'Required. 150 characters or fewer. '
             'Letters, digits and @/./+/-/_ only.'
         ),
-        validators=[AbstractUser.username_validator],
+        validators=[
+            AbstractUser.username_validator,
+            MinLengthValidator(settings.USER_USERNAME_MIN_LENGTH)
+        ],
         error_messages={
             'unique': _("A user with that username already exists."),
         },
@@ -25,11 +29,17 @@ class User(AbstractUser):
     first_name = models.CharField(
         _('first name'),
         max_length=settings.USER_FIRST_NAME_MAX_LENGTH,
+        validators=[
+            MinLengthValidator(settings.USER_FIRST_NAME_MIN_LENGTH)
+        ],
         blank=True
     )
     last_name = models.CharField(
         _('last name'),
         max_length=settings.USER_LAST_NAME_MAX_LENGTH,
+        validators=[
+            MinLengthValidator(settings.USER_LAST_NAME_MIN_LENGTH)
+        ],
         blank=True
     )
     email = models.EmailField(
