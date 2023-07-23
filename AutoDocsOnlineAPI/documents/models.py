@@ -35,7 +35,8 @@ class Template(models.Model):
     description = models.TextField(
         'description',
         unique=True,
-        max_length=settings.TEMPLATE_DESCRIPTION_MAX_LENGTH
+        max_length=settings.TEMPLATE_DESCRIPTION_MAX_LENGTH,
+        blank=True,
     )
     is_official = models.BooleanField(
         'official tag',
