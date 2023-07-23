@@ -4,6 +4,8 @@ from django.conf import settings
 from django.core.validators import MinLengthValidator
 from django.db import models
 
+from users.models import User
+
 from .validators import name_in_document_validator
 
 
@@ -48,3 +50,40 @@ class Template(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class UserTemplateValue(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        User,
+        models.CASCADE,
+        related_name='%(class)s'
+    )
+    template = models.ForeignKey(
+        Template,
+        models.CASCADE,
+        related_name='%(class)s'
+    )
+    value = models.CharField(
+        max_length=settings.USER_TEMPLATE_VALUE_VALUE_MAX_LENGTH,
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=('user', 'template'),
+                name='user_template_unique'
+            )
+        ]
+        verbose_name = 'UserTemplateValue'
+        verbose_name_plural = "UserTemplateValues"
+
+    def __str__(self):
+        short_length = settings.USER_TEMPLATE_VALUE_SHORT_VALUE_LENGTH
+
+        value = (
+            self.value[:short_length] + '...'
+            if len(self.value) > short_length
+            else self.value
+        )
+        return ' '.join(map(str, [self.user, self.template, value]))
