@@ -61,9 +61,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'AutoDocsOnlineAPI.wsgi.application'
 
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000'
-]
+CORS_ORIGIN_WHITELIST = env('CORS_ORIGIN_WHITELIST', '*').split(',')
 
 
 # Use sql in debug mode and postgers in production(on server)
