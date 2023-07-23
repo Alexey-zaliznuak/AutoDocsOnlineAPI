@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.validators import MinLengthValidator
 from django.db import models
 
+from core.utils import make_documents_directory_path
 from users.models import User
 
 from .validators import name_in_document_validator
@@ -88,3 +89,24 @@ class DefaultUserTemplateValue(models.Model):
             else self.value
         )
         return ' '.join(map(str, [self.user, self.template, value]))
+
+
+class Document(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    author = models.ForeignKey(
+        User,
+        models.CASCADE,
+        related_name='%(class)s'
+    )
+    title = models.CharField(
+        max_length=settings.DOCUMENT_TITLE_MAX_LENGTH,
+        validators=[MinLengthValidator(settings.DOCUMENT_TITLE_MAX_LENGTH)]
+    )
+    description = models.TextField(
+        unique=True,
+        max_length=settings.DOCUMENT_DESCRIPTION_MAX_LENGTH,
+        blank=True
+    )
+    file = models.FileField(
+        upload_to=make_documents_directory_path,
+    )
