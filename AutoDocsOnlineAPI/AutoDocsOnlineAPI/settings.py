@@ -66,7 +66,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'AutoDocsOnlineAPI.wsgi.application'
 
 CORS_ORIGIN_WHITELIST = env(
-    'CORS_ORIGIN_WHITELIST', ['http://localhost:3001']
+    'CORS_ORIGIN_WHITELIST', 'http://localhost:3001'
 ).split(',')
 
 
