@@ -5,6 +5,7 @@ from django.core.validators import MinLengthValidator
 from django.db import models
 
 from core.utils import make_documents_directory_path, short
+from core.models import CreatedModel
 from users.models import User
 
 from .validators import name_in_document_validator
@@ -87,7 +88,7 @@ class UserTemplateDefaultValue(models.Model):
         return ' '.join(map(str, [self.user, self.template, value]))
 
 
-class Document(models.Model):
+class Document(CreatedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(
         User,
@@ -105,9 +106,6 @@ class Document(models.Model):
     )
     file = models.FileField(
         upload_to=make_documents_directory_path,
-    )
-    pub_date = models.DateTimeField(
-        'date of publication', auto_now_add=True
     )
 
     class Meta:
