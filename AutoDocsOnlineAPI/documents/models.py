@@ -120,3 +120,49 @@ class Document(CreatedModel):
 
     def __str__(self):
         return short(self.title, settings.DOCUMENT_TITLE_SHORT_LENGTH)
+
+
+class DocumentPackage(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(
+        max_length=settings.DOCKUMENT_PACKAGE_TITLE_MAX_LENGTH,
+        validators=[
+            MinLengthValidator(settings.DOCKUMENT_PACKAGE_TITLE_MIN_LENGTH)
+        ],
+        unique=True
+    )
+    author = models.ForeignKey(
+        User,
+        models.CASCADE,
+        related_name='%(class)s'
+    )
+    documents = models.ManyToManyField(Document, 'DocumentDocumentPackage')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=('author', 'title'),
+                name='author_title_unique'
+            )
+        ]
+        verbose_name = 'Documents package'
+        verbose_name_plural = "Documents packages"
+
+    def __str__(self):
+        return ' '.join(map(str, self.author, self.document_package))
+
+
+class DocumentDocumentPackage(models.Model):
+    document = models.ForeignKey(
+        Document,
+        models.CASCADE,
+        related_name='%(class)s'
+    )
+    document_package = models.ForeignKey(
+        DocumentPackage,
+        models.CASCADE,
+        related_name='%(class)s'
+    )
+
+    def __str__(self):
+        return ' '.join(map(str, self.document, self.document_package))
