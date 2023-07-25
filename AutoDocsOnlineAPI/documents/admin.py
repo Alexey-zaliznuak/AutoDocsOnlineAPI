@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from core.utils import short
 
-from .models import Document, Template, DefaultUserTemplateValue
+from .models import Document, Template, UserTemplateDefaultValue
 
 
 @admin.register(Template)
@@ -13,8 +13,8 @@ class TemplateAdmin(admin.ModelAdmin):
     search_fields = ('title', 'name_in_document', 'description',)
 
 
-@admin.register(DefaultUserTemplateValue)
-class DefaultUserTemplateValueAdmin(admin.ModelAdmin):
+@admin.register(UserTemplateDefaultValue)
+class UserTemplateDefaultValueAdmin(admin.ModelAdmin):
     list_display = ('user', 'template', 'value', 'pk',)
     search_fields = ('title', 'name_in_document', 'description',)
 

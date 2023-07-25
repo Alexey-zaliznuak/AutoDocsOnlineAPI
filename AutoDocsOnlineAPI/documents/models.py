@@ -54,7 +54,7 @@ class Template(models.Model):
         return self.title
 
 
-class DefaultUserTemplateValue(models.Model):
+class UserTemplateDefaultValue(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         User,
