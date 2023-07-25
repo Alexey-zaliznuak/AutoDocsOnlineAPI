@@ -1,4 +1,7 @@
+from django.conf import settings
 from django.contrib import admin
+
+from core.utils import short
 
 from .models import Document, Template, DefaultUserTemplateValue
 
@@ -19,10 +22,13 @@ class DefaultUserTemplateValueAdmin(admin.ModelAdmin):
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
     list_display = (
-        'title',
+        'title_',
         'author',
         'pk',
     )
     search_fields = ('title', 'author__username',)
-    list_filter = ('title',)
     empty_value_display = '-пусто-'
+
+    @admin.display(empty_value='unknown', description="title_")
+    def title_(self, document):
+        return short(document.title, settings.DOCUMENT_TITLE_SHORT_LENGTH)
