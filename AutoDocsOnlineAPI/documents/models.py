@@ -141,6 +141,7 @@ class DocumentPackage(models.Model):
 
 
 class DocumentDocumentPackage(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     document = models.ForeignKey(
         Document,
         models.CASCADE,
