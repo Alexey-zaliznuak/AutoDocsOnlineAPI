@@ -109,12 +109,6 @@ class Document(CreatedModel):
     )
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=('author', 'title'),
-                name='author_title_unique'
-            )
-        ]
         verbose_name = 'Document'
         verbose_name_plural = "Documents"
 
@@ -139,12 +133,6 @@ class DocumentPackage(models.Model):
     documents = models.ManyToManyField(Document, 'DocumentDocumentPackage')
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=('author', 'title'),
-                name='author_title_unique'
-            )
-        ]
         verbose_name = 'Documents package'
         verbose_name_plural = "Documents packages"
 
