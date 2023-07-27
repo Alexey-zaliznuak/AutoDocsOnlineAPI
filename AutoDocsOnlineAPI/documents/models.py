@@ -59,7 +59,7 @@ class TemplateValue(models.Model):
     template = models.ForeignKey(
         Template,
         models.CASCADE,
-        related_name='%(class)s'
+        related_name='values'
     )
     value = models.CharField(
         max_length=settings.TEMPLATE_VALUE_VALUE_MAX_LENGTH,
@@ -85,12 +85,12 @@ class UserDefaultTemplateValue(models.Model):
     user = models.ForeignKey(
         User,
         models.CASCADE,
-        related_name='%(class)s'
+        related_name='default_template_values'
     )
     template_value = models.ForeignKey(
         TemplateValue,
         models.CASCADE,
-        related_name='%(class)s',
+        related_name='default_users_values',
     )
 
     class Meta:
@@ -106,7 +106,7 @@ class Document(CreatedModel):
     author = models.ForeignKey(
         User,
         models.CASCADE,
-        related_name='%(class)s'
+        related_name='documents'
     )
     title = models.CharField(
         max_length=settings.DOCUMENT_TITLE_MAX_LENGTH,
@@ -141,7 +141,7 @@ class DocumentPackage(models.Model):
     author = models.ForeignKey(
         User,
         models.CASCADE,
-        related_name='%(class)s'
+        related_name='document_packages'
     )
     documents = models.ManyToManyField(Document, 'DocumentDocumentPackage')
 
@@ -158,12 +158,12 @@ class Record(CreatedModel):
     user = models.ForeignKey(
         User,
         models.CASCADE,
-        related_name='%(class)s'
+        related_name='records'
     )
     document_package = models.ForeignKey(
         DocumentPackage,
         models.CASCADE,
-        related_name='%(class)s'
+        related_name='records'
     )
     templates_values = models.ManyToManyField(
         TemplateValue,
@@ -188,7 +188,7 @@ class DocumentDocumentPackage(models.Model):
     document = models.ForeignKey(
         Document,
         models.CASCADE,
-        related_name='%(class)s'
+        related_name='document_packages'
     )
     document_package = models.ForeignKey(
         DocumentPackage,
@@ -218,7 +218,7 @@ class DocumentTemplate(models.Model):
     template = models.ForeignKey(
         Template,
         models.CASCADE,
-        related_name='%(class)s'
+        related_name='documents'
     )
 
     class Meta:
@@ -241,5 +241,5 @@ class RecordTemplateValue(models.Model):
     template_value = models.ForeignKey(
         TemplateValue,
         models.CASCADE,
-        related_name='%(class)s'
+        related_name='records'
     )
