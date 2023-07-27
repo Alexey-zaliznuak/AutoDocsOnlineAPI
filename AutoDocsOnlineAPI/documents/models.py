@@ -193,7 +193,6 @@ class DocumentDocumentPackage(models.Model):
     document_package = models.ForeignKey(
         DocumentPackage,
         models.CASCADE,
-        related_name='%(class)s'
     )
 
     class Meta:
@@ -215,7 +214,6 @@ class DocumentTemplate(models.Model):
     document = models.ForeignKey(
         Document,
         models.CASCADE,
-        related_name='%(class)s'
     )
     template = models.ForeignKey(
         Template,
@@ -235,3 +233,13 @@ class DocumentTemplate(models.Model):
 
     def __str__(self):
         return ' '.join(map(str, [self.document, self.template]))
+
+
+class RecordTemplateValue(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    record = models.ForeignKey(Record, models.CASCADE)
+    template_value = models.ForeignKey(
+        TemplateValue,
+        models.CASCADE,
+        related_name='%(class)s'
+    )
