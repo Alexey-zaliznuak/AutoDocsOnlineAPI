@@ -119,9 +119,9 @@ class Document(CreatedModel):
 class DocumentPackage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(
-        max_length=settings.DOCKUMENT_PACKAGE_TITLE_MAX_LENGTH,
+        max_length=settings.DOCUMENT_PACKAGE_TITLE_MAX_LENGTH,
         validators=[
-            MinLengthValidator(settings.DOCKUMENT_PACKAGE_TITLE_MIN_LENGTH)
+            MinLengthValidator(settings.DOCUMENT_PACKAGE_TITLE_MIN_LENGTH)
         ],
         unique=True
     )
