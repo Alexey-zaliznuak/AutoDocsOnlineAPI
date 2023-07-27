@@ -36,7 +36,6 @@ class Template(models.Model):
     )
     description = models.TextField(
         'description',
-        unique=True,
         max_length=settings.TEMPLATE_DESCRIPTION_MAX_LENGTH,
         blank=True,
     )
@@ -100,7 +99,6 @@ class Document(CreatedModel):
         validators=[MinLengthValidator(settings.DOCUMENT_TITLE_MAX_LENGTH)]
     )
     description = models.TextField(
-        unique=True,
         max_length=settings.DOCUMENT_DESCRIPTION_MAX_LENGTH,
         blank=True
     )
