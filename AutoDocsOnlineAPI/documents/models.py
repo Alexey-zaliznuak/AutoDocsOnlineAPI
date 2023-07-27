@@ -54,37 +54,51 @@ class Template(models.Model):
         return self.title
 
 
-class UserTemplateDefaultValue(models.Model):
+class TemplateValue(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(
-        User,
-        models.CASCADE,
-        related_name='%(class)s'
-    )
     template = models.ForeignKey(
         Template,
         models.CASCADE,
         related_name='%(class)s'
     )
     value = models.CharField(
-        max_length=settings.USER_TEMPLATE_VALUE_VALUE_MAX_LENGTH,
+        max_length=settings.TEMPLATE_VALUE_VALUE_MAX_LENGTH,
     )
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=('user', 'template'),
-                name='default_user_template_unique'
+                fields=('template', 'value'),
+                name='template_value_unique'
             )
         ]
-        verbose_name = 'DefaultUserTemplateValue'
-        verbose_name_plural = "DeafaultUserTemplateValues"
+        verbose_name = 'TemplateValue'
+        verbose_name_plural = "TemplateValues"
 
     def __str__(self):
-        value = short(
-            self.value, settings.USER_TEMPLATE_VALUE_SHORT_VALUE_LENGTH
-        )
-        return ' '.join(map(str, [self.user, self.template, value]))
+        short_value = short(self.value, )
+        return ' '.join(map(str, [self.template, short_value]))
+
+
+class UserDefaultTemplateValue(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        User,
+        models.CASCADE,
+        related_name='%(class)s'
+    )
+    template_value = models.ForeignKey(
+        TemplateValue,
+        models.CASCADE,
+        related_name='%(class)s',
+    )
+
+    class Meta:
+        verbose_name = 'UserDefaultTemplateValue'
+        verbose_name_plural = "UserDefaultTemplateValues"
+
+    def __str__(self):
+        return ' '.join(map(str, [self.user, self.template_value]))
 
 
 class Document(CreatedModel):
@@ -105,13 +119,14 @@ class Document(CreatedModel):
     file = models.FileField(
         upload_to=make_documents_directory_path,
     )
+    templates = models.ManyToManyField(Template, 'DocumentTemplate')
 
     class Meta:
         verbose_name = 'Document'
         verbose_name_plural = "Documents"
 
     def __str__(self):
-        return short(self.title, settings.DOCUMENT_TITLE_SHORT_LENGTH)
+        return ' '.join(map(str,[self.author, self.title]))
 
 
 class DocumentPackage(models.Model):
@@ -135,7 +150,37 @@ class DocumentPackage(models.Model):
         verbose_name_plural = "Documents packages"
 
     def __str__(self):
-        return ' '.join(map(str, self.author, self.document_package))
+        return ' '.join(map(str,[self.author, self.title]))
+
+
+class Record(CreatedModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        User,
+        models.CASCADE,
+        related_name='%(class)s'
+    )
+    document_package = models.ForeignKey(
+        DocumentPackage,
+        models.CASCADE,
+        related_name='%(class)s'
+    )
+    templates_values = models.ManyToManyField(
+        TemplateValue,
+        'RecordTemplateValue',
+    )
+
+    class Meta:
+        verbose_name = 'Record'
+        verbose_name_plural = "Records"
+
+    def __str__(self):
+        return ' '.join(
+            map(
+                str,
+                [self.user, self.document_package, self.creation_date]
+            )
+        )
 
 
 class DocumentDocumentPackage(models.Model):
@@ -151,5 +196,42 @@ class DocumentDocumentPackage(models.Model):
         related_name='%(class)s'
     )
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=('document', 'document_package'),
+                name='document_document_package_unique'
+            )
+        ]
+        verbose_name = 'DocumentDocumentPackage'
+        verbose_name_plural = "DocumentDocumentPackages"
+
     def __str__(self):
-        return ' '.join(map(str, self.document, self.document_package))
+        return ' '.join(map(str, [self.document, self.document_package]))
+
+
+class DocumentTemplate(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    document = models.ForeignKey(
+        Document,
+        models.CASCADE,
+        related_name='%(class)s'
+    )
+    template = models.ForeignKey(
+        Template,
+        models.CASCADE,
+        related_name='%(class)s'
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=('document', 'template'),
+                name='document_template_unique'
+            )
+        ]
+        verbose_name = 'DocumentTemplate'
+        verbose_name_plural = "DocumentTemplates"
+
+    def __str__(self):
+        return ' '.join(map(str, [self.document, self.template]))
