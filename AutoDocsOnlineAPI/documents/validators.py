@@ -8,10 +8,10 @@ def name_in_document_validator(value) -> None:
 
     if not value.startswith(prefix):
         raise ValidationError(
-            f"name_in_document must start with '{prefix}'"
+            f"Name in document must start with '{prefix}'"
         )
 
     if not value.endswith(postfix):
         raise ValidationError(
-            f"name_in_document must end with '{postfix}'"
+            f"Name in document must end with '{postfix}'"
         )
