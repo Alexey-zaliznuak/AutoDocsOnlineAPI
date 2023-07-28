@@ -85,7 +85,7 @@ class UserDefaultTemplateValue(models.Model):
     user = models.ForeignKey(
         User,
         models.CASCADE,
-        related_name='default_template_values'
+        related_name='default_templates_values'
     )
     template_value = models.ForeignKey(
         TemplateValue,
@@ -141,7 +141,7 @@ class DocumentPackage(models.Model):
     author = models.ForeignKey(
         User,
         models.CASCADE,
-        related_name='document_packages'
+        related_name='documents_packages'
     )
     documents = models.ManyToManyField(Document, 'DocumentDocumentPackage')
 
