@@ -126,7 +126,7 @@ class Document(CreatedModel):
         verbose_name_plural = "Documents"
 
     def __str__(self):
-        return ' '.join(map(str,[self.author, self.title]))
+        return ' '.join(map(str, [self.author, self.title]))
 
 
 class DocumentPackage(models.Model):
@@ -150,7 +150,7 @@ class DocumentPackage(models.Model):
         verbose_name_plural = "Documents packages"
 
     def __str__(self):
-        return ' '.join(map(str,[self.author, self.title]))
+        return ' '.join(map(str, [self.author, self.title]))
 
 
 class Record(CreatedModel):

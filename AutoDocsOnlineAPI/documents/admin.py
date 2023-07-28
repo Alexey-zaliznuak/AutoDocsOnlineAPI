@@ -14,7 +14,7 @@
 
 # @admin.register(Template)
 # class TemplateAdmin(admin.ModelAdmin):
-#     list_display = ('title', 'is_official', 'name_in_document', 'description',)
+#     list_display = ('title', 'is_official', 'name_in_document', 'description'
 #     list_filter = ('is_official',)
 #     search_fields = ('title', 'name_in_document', 'description',)
 #     empty_value_display = '-empty-'
