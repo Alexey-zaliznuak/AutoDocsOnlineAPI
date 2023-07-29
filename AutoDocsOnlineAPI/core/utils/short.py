@@ -3,7 +3,7 @@ from django.conf import settings
 
 def short(
         text: str,
-        max_length: int = 20,
+        max_length: int = settings.SHORT_DEFAULT_MAX_LENGTH,
         short_end: str = settings.SHORT_END
 ) -> str:
     """

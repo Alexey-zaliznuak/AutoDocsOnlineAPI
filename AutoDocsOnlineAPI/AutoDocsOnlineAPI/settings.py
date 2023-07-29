@@ -178,8 +178,11 @@ USER_SEND_CONFIRM_CODE_EMAIL_SUBJECT = "Registration on AutoDocsOnline"
 USER_SEND_CONFIRM_CODE_EMAIL_MESSAGE = "Your confirm code: {code}"
 
 
-# Models settings
+# core settings
 SHORT_END = "..."
+SHORT_DEFAULT_MAX_LENGTH = 20
+
+# Models settings
 
 # User
 USER_USERNAME_MAX_LENGTH = 150
