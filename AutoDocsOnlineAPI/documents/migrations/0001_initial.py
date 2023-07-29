@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('title', models.CharField(max_length=100, unique=True, validators=[django.core.validators.MinLengthValidator(3)], verbose_name='title')),
-                ('name_in_document', models.CharField(help_text="name in document, prefer save add prefix '{{'and postfix '}}'", max_length=30, unique=True, validators=[documents.validators.name_in_document_validator, django.core.validators.MinLengthValidator(7)], verbose_name='template name in document')),
+                ('name_in_document', models.CharField(help_text="name in document, prefer save add prefix '{{'and postfix '}}'", max_length=30, unique=True, validators=[django.core.validators.MinLengthValidator(7)], verbose_name='template name in document')),
                 ('description', models.TextField(blank=True, max_length=500, verbose_name='description')),
                 ('is_official', models.BooleanField(blank=True, default=False, verbose_name='official tag')),
             ],

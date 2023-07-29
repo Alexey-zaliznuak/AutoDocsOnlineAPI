@@ -1,17 +1,19 @@
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core import validators
 
 
-def name_in_document_validator(value) -> None:
+def validate_name_in_document(value):
+    """
+    Check prefix, postfix and valid characters
+    """
     prefix = settings.TEMPLATE_NAME_IN_DOCUMENT_PREFIX
     postfix = settings.TEMPLATE_NAME_IN_DOCUMENT_POSTFIX
 
-    if not value.startswith(prefix):
-        raise ValidationError(
-            f"Name in document must start with '{prefix}'"
-        )
+    message = (
+        "Enter a valid name in document. This value may contain only letters "
+        "and '-'/'_' characters and start/end with "
+        f"'{prefix}' and '{postfix}' respectively."
+    )
+    regex = rf"^{prefix}[a-zA-Z-_]+{postfix}\Z"
 
-    if not value.endswith(postfix):
-        raise ValidationError(
-            f"Name in document must end with '{postfix}'"
-        )
+    return validators.RegexValidator(regex, message)(value)
