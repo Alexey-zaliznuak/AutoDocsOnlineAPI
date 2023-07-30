@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 
-def object_url(obj, title) -> str:
+def object_url(obj, title: str = None) -> str:
     """
     Return mark save html link on edit object in django admin panel.
     :param title string - link on obj
