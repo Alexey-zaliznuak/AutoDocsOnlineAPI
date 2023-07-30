@@ -8,7 +8,7 @@ from .models import User
 
 @admin.register(User)
 class MyUserAdmin(UserAdmin):
-    list_display = ('username', 'email', 'documents', 'pk', 'email_confirmed')
+    list_display = ('username', 'email', 'pk', 'email_confirmed')
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {
