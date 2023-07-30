@@ -29,4 +29,5 @@ class MyUserAdmin(UserAdmin):
         }),
     )
 
+
 admin.site.unregister(Group)
