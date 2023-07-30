@@ -29,9 +29,4 @@ class MyUserAdmin(UserAdmin):
         }),
     )
 
-    @admin.display(empty_value='unknown', description="documents")
-    def documents(self, user):
-        return '\n'.join(map(str, user.document.all()))
-
-
 admin.site.unregister(Group)
