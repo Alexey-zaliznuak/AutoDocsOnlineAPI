@@ -14,5 +14,5 @@ def object_url(obj, title: str = None) -> str:
         kwargs={'object_id': obj.pk}
     )
     return mark_safe(
-        f'<a target="_blank" href={url}>{title or obj}</a>'
+        f'<a href={url}>{title or obj}</a>'
     )
