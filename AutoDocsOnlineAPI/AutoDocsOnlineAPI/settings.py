@@ -1,7 +1,9 @@
+from datetime import timedelta
 from os import getenv as env
 from pathlib import Path
 
 from dotenv import load_dotenv
+
 
 load_dotenv()
 
@@ -122,6 +124,11 @@ SWAGGER_SETTINGS = {
     }
 }
 
+SIMPLE_JWT = {
+   'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
+   'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
 
 # Auth settings
 AUTH_USER_MODEL = 'users.User'
@@ -155,7 +162,7 @@ USE_L10N = True
 USE_TZ = env('USE_TZ') == 'True'
 
 
-# Static/meta settings
+# Static/media settings
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'collected_static'
 
