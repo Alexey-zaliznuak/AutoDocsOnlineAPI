@@ -110,7 +110,7 @@ class Document(CreatedModel):
     )
     title = models.CharField(
         max_length=settings.DOCUMENT_TITLE_MAX_LENGTH,
-        validators=[MinLengthValidator(settings.DOCUMENT_TITLE_MAX_LENGTH)]
+        validators=[MinLengthValidator(settings.DOCUMENT_TITLE_MIN_LENGTH)]
     )
     description = models.TextField(
         max_length=settings.DOCUMENT_DESCRIPTION_MAX_LENGTH,
