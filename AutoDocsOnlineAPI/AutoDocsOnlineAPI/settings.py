@@ -125,7 +125,7 @@ SWAGGER_SETTINGS = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
     'AUTH_HEADER_TYPES': ('Bearer',),
-    'BLACKLIST_AFTER_ROTATION' : False,
+    'BLACKLIST_AFTER_ROTATION': False,
 }
 
 
