@@ -10,5 +10,5 @@ def short(
     if necessary, truncates the string to the specified value.
     """
     if len(text) > max_length:
-        return text[:max_length] + short_end
+        return text[:max_length - len(short_end)] + short_end
     return text
