@@ -119,7 +119,7 @@ class Document(CreatedModel):
     file = models.FileField(
         upload_to=make_documents_directory_path,
     )
-    templates = models.ManyToManyField(Template, 'DocumentTemplate')
+    templates = models.ManyToManyField(Template, through='DocumentTemplate')
 
     class Meta:
         verbose_name = 'Document'
@@ -143,7 +143,9 @@ class DocumentPackage(models.Model):
         models.CASCADE,
         related_name='documents_packages'
     )
-    documents = models.ManyToManyField(Document, 'DocumentDocumentPackage')
+    documents = models.ManyToManyField(
+        Document, through='DocumentDocumentPackage'
+    )
 
     class Meta:
         verbose_name = 'Documents package'
@@ -167,7 +169,7 @@ class Record(CreatedModel):
     )
     templates_values = models.ManyToManyField(
         TemplateValue,
-        'RecordTemplateValue',
+        through='RecordTemplateValue',
     )
 
     class Meta:
