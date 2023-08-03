@@ -8,7 +8,7 @@ from core.utils import make_documents_directory_path, short
 from core.models import CreatedModel
 from users.models import User
 
-from .validators import validate_name_in_document
+from .validators import NameInDocumentRegexValidator
 
 
 class Template(models.Model):
@@ -30,7 +30,7 @@ class Template(models.Model):
             f"and postfix '{settings.TEMPLATE_NAME_IN_DOCUMENT_POSTFIX}'"
         ),
         validators=[
-            validate_name_in_document,
+            NameInDocumentRegexValidator(),
             MinLengthValidator(settings.TEMPLATE_NAME_IN_DOCUMENT_MIN_LENGTH),
         ]
     )
