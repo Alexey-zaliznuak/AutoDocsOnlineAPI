@@ -21,6 +21,24 @@ from .models import (
 HTML_NEW_LINE = '<br \\>'
 
 
+class DocumentDocumentPackageInline(admin.TabularInline):
+    model = DocumentDocumentPackage
+    fk_name = 'document_package'
+    extra = 1
+
+
+class DocumentTemplateInline(admin.TabularInline):
+    model = DocumentTemplate
+    fk_name = 'document'
+    extra = 1
+
+
+class RecordTemplateValueInline(admin.TabularInline):
+    model = RecordTemplateValue
+    fk_name = 'record'
+    extra = 1
+
+
 @admin.register(Template)
 class TemplateAdmin(admin.ModelAdmin):
     list_display = (
@@ -91,12 +109,6 @@ class UserDefaultTemplateValueAdmin(admin.ModelAdmin):
         )
 
 
-class DocumentTemplateInline(admin.TabularInline):
-    model = DocumentTemplate
-    fk_name = 'document'
-    extra = 1
-
-
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
     inlines = [DocumentTemplateInline]
@@ -129,12 +141,6 @@ class DocumentAdmin(admin.ModelAdmin):
     def file_(self, obj):
         # TODO
         return 'link'
-
-
-class DocumentDocumentPackageInline(admin.TabularInline):
-    model = DocumentDocumentPackage
-    fk_name = 'document_package'
-    extra = 1
 
 
 @admin.register(DocumentPackage)
@@ -202,12 +208,6 @@ class DocumenTemplateAdmin(admin.ModelAdmin):
     @admin.display(empty_value='unknown', description="pk")
     def pk_(self, obj):
         return object_url(obj, obj.pk)
-
-
-class RecordTemplateValueInline(admin.TabularInline):
-    model = RecordTemplateValue
-    fk_name = 'record'
-    extra = 1
 
 
 @admin.register(Record)
