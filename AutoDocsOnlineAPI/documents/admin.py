@@ -43,6 +43,7 @@ class RecordTemplateValueInline(admin.TabularInline):
 class TemplateAdmin(admin.ModelAdmin):
     list_display = (
         'title',
+        'author',
         'name_in_document',
         'is_official',
         'description_',
@@ -55,6 +56,10 @@ class TemplateAdmin(admin.ModelAdmin):
     @admin.display(empty_value='unknown', description="description")
     def description_(self, obj):
         return short(obj.description)
+
+    @admin.display(empty_value='unknown', description="author")
+    def author_(self, obj):
+        return object_url(obj.author)
 
 
 @admin.register(TemplateValue)

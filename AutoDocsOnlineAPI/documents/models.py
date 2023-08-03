@@ -13,6 +13,11 @@ from .validators import NameInDocumentRegexValidator
 
 class Template(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    author = models.ForeignKey(
+        User,
+        models.CASCADE,
+        related_name='templates'
+    )
     title = models.CharField(
         "title",
         max_length=settings.TEMPLATE_TITLE_MAX_LENGTH,
