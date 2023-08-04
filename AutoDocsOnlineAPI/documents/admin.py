@@ -43,7 +43,7 @@ class RecordTemplateValueInline(admin.TabularInline):
 class TemplateAdmin(admin.ModelAdmin):
     list_display = (
         'title',
-        'author',
+        'author_',
         'name_in_document',
         'is_official',
         'description_',
