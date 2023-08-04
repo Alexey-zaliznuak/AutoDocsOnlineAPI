@@ -10,10 +10,10 @@ from .models import (
     TemplateValue,
     Record,
     Document,
-    DocumentPackage,
+    DocumentsPackage,
     DocumentTemplate,
     RecordTemplateValue,
-    DocumentDocumentPackage,
+    DocumentDocumentsPackage,
     UserDefaultTemplateValue,
 )
 
@@ -21,8 +21,8 @@ from .models import (
 HTML_NEW_LINE = '<br \\>'
 
 
-class DocumentDocumentPackageInline(admin.TabularInline):
-    model = DocumentDocumentPackage
+class DocumentDocumentsPackageInline(admin.TabularInline):
+    model = DocumentDocumentsPackage
     fk_name = 'document_package'
     extra = 1
 
@@ -148,9 +148,9 @@ class DocumentAdmin(admin.ModelAdmin):
         return 'link'
 
 
-@admin.register(DocumentPackage)
-class DocumentPackageAdmin(admin.ModelAdmin):
-    inlines = [DocumentDocumentPackageInline]
+@admin.register(DocumentsPackage)
+class DocumentsPackageAdmin(admin.ModelAdmin):
+    inlines = [DocumentDocumentsPackageInline]
     list_display = (
         'title_',
         'author',
@@ -171,8 +171,8 @@ class DocumentPackageAdmin(admin.ModelAdmin):
         )
 
 
-@admin.register(DocumentDocumentPackage)
-class DocumentDocumentPackageAdmin(admin.ModelAdmin):
+@admin.register(DocumentDocumentsPackage)
+class DocumentDocumentsPackageAdmin(admin.ModelAdmin):
     list_display = (
         'document_package_',
         'document_',

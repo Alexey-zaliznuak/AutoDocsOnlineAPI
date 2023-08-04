@@ -134,7 +134,7 @@ class Document(CreatedModel):
         return ' '.join(map(str, [self.author, self.title]))
 
 
-class DocumentPackage(models.Model):
+class DocumentsPackage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(
         max_length=settings.DOCUMENT_PACKAGE_TITLE_MAX_LENGTH,
@@ -149,7 +149,7 @@ class DocumentPackage(models.Model):
         related_name='documents_packages'
     )
     documents = models.ManyToManyField(
-        Document, through='DocumentDocumentPackage'
+        Document, through='DocumentDocumentsPackage'
     )
 
     class Meta:
@@ -168,7 +168,7 @@ class Record(CreatedModel):
         related_name='records'
     )
     document_package = models.ForeignKey(
-        DocumentPackage,
+        DocumentsPackage,
         models.CASCADE,
         related_name='records'
     )
@@ -190,7 +190,7 @@ class Record(CreatedModel):
         )
 
 
-class DocumentDocumentPackage(models.Model):
+class DocumentDocumentsPackage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     document = models.ForeignKey(
         Document,
@@ -198,7 +198,7 @@ class DocumentDocumentPackage(models.Model):
         related_name='document_packages'
     )
     document_package = models.ForeignKey(
-        DocumentPackage,
+        DocumentsPackage,
         models.CASCADE,
     )
 
@@ -209,8 +209,8 @@ class DocumentDocumentPackage(models.Model):
                 name='document_document_package_unique'
             )
         ]
-        verbose_name = 'DocumentDocumentPackage'
-        verbose_name_plural = "DocumentDocumentPackages"
+        verbose_name = 'DocumentDocumentsPackage'
+        verbose_name_plural = "DocumentDocumentsPackages"
 
     def __str__(self):
         return ' '.join(map(str, [self.document, self.document_package]))
