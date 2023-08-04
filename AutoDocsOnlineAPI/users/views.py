@@ -21,7 +21,6 @@ from .serializers import (
 
 
 class UserMixin(
-    mixins.ListModelMixin,
     mixins.UpdateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.DestroyModelMixin,
@@ -37,7 +36,7 @@ class UserViewSet(UserMixin):
     filter_backends = (filters.SearchFilter, )
     pagination_class = StandardResultsSetPagination
     lookup_field = 'username'
-    http_method_names = ['get', 'post', 'patch', 'delete']
+    http_method_names = ['get', 'post', 'delete']
 
     @action(
         methods=['get', 'patch', 'delete'],
@@ -57,7 +56,7 @@ class UserViewSet(UserMixin):
 
         return self.retrieve(request, request.user.username)
 
-    @action(["post"], detail=False)
+    @action(["post"], detail=False, url_path='me/update_password')
     @swagger_auto_schema(
         request_body=ChangePasswordSerializer,
         operation_description='Update current password.',
