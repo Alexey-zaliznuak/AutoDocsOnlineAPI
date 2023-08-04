@@ -26,22 +26,6 @@ class User(AbstractUser):
             'unique': _("A user with that username already exists."),
         },
     )
-    first_name = models.CharField(
-        _('first name'),
-        max_length=settings.USER_FIRST_NAME_MAX_LENGTH,
-        validators=[
-            MinLengthValidator(settings.USER_FIRST_NAME_MIN_LENGTH)
-        ],
-        blank=True
-    )
-    last_name = models.CharField(
-        _('last name'),
-        max_length=settings.USER_LAST_NAME_MAX_LENGTH,
-        validators=[
-            MinLengthValidator(settings.USER_LAST_NAME_MIN_LENGTH)
-        ],
-        blank=True
-    )
     email = models.EmailField(
         _('email address'),
         max_length=settings.USER_EMAIL_MAX_LENGTH,
@@ -50,7 +34,6 @@ class User(AbstractUser):
             'unique': _("A user with that email already exists."),
         },
     )
-
     email_confirmed = models.BooleanField(_("email confirmed"), default=False)
     confirmation_code = models.CharField(
         _("confirm code"),
@@ -58,6 +41,8 @@ class User(AbstractUser):
         blank=True,
         null=True,
     )
+    first_name = None
+    last_name = None
 
     class Meta:
         ordering = ["username"]

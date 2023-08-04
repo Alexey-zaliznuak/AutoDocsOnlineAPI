@@ -16,8 +16,6 @@ class UserSerializer(serializers.ModelSerializer):
             'id',
             'username',
             'email',
-            'first_name',
-            'last_name',
             'date_joined',
         )
 
@@ -28,12 +26,6 @@ class SignUpSerializer(serializers.Serializer):
         max_length=settings.USER_USERNAME_MAX_LENGTH
     )
     email = serializers.EmailField(max_length=settings.USER_EMAIL_MAX_LENGTH)
-    first_name = serializers.CharField(
-        max_length=settings.USER_FIRST_NAME_MAX_LENGTH
-    )
-    last_name = serializers.CharField(
-        max_length=settings.USER_LAST_NAME_MAX_LENGTH
-    )
     password = serializers.CharField()
 
     class Meta:
@@ -42,8 +34,6 @@ class SignUpSerializer(serializers.Serializer):
             'username',
             'email',
             'password',
-            'first_name',
-            'last_name',
         )
 
     def validate_username(sef, value):
