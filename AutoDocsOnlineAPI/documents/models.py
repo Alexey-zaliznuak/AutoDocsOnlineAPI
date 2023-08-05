@@ -30,7 +30,7 @@ class Template(models.Model):
         max_length=settings.TEMPLATE_NAME_IN_DOCUMENT_MAX_LENGTH,
         help_text=(
             "name in document, "
-            f"prefer save add "
+            f"must have "
             f"prefix '{settings.TEMPLATE_NAME_IN_DOCUMENT_PREFIX}'"
             f"and postfix '{settings.TEMPLATE_NAME_IN_DOCUMENT_POSTFIX}'"
         ),
