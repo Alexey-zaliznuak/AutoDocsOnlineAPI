@@ -19,6 +19,7 @@ from .models import (
 
 
 HTML_NEW_LINE = '<br \\>'
+HTML_LINK = '<a href={url}>{title}</a>'
 
 
 class DocumentDocumentsPackageInline(admin.TabularInline):
@@ -144,8 +145,10 @@ class DocumentAdmin(admin.ModelAdmin):
 
     @admin.display(empty_value='unknown', description="file")
     def file_(self, obj):
-        # TODO
-        return 'link'
+        return mark_safe(HTML_LINK.format(
+            url=settings.MEDIA_URL + str(obj.file),
+            title='download'
+        ))
 
 
 @admin.register(DocumentsPackage)
