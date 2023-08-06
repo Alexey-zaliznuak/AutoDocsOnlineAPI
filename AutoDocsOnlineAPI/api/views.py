@@ -3,14 +3,18 @@ from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 
 from documents.models import (
-    Template
+    Document,
+    Template,
 )
 
 from .filters import (
+    FilterDocument,
     FilterTemplate,
 )
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (
+    DocumentSerializer,
+    GetDocumentSerializer,
     TemplateSerializer,
 )
 
@@ -32,33 +36,38 @@ class TemplateViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-# class RecordViewSet(viewsets.ModelViewSet):
-#     ...
 
-# class DocumentViewSet(viewsets.ModelViewSet):
-#     serializer_class = DocumentSerializer
-#     permission_classes = (IsAuthenticated, IsAuthorOrReadOnly,)
+class DocumentViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, IsAuthorOrReadOnly,)
+    http_method_names = HTTP_METHOD_NAMES_WITHOUT_PUT
 
-#     @action(["get"], Trueurl_name='download_document', permission_classes=())
-#     def download(self, request, pk):
-#         context_400 = {"Access denied": "document is private"}
-#         document = Document.objects.get(pk=pk)
+    queryset = Document.objects.all()
+    serializer_class = DocumentSerializer
 
-#         if not document.public and request.user != document.owner:
-#             return Response(context_400, status=status.HTTP_400_BAD_REQUEST)
+    filterset_class = FilterDocument
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('^title',)
 
-#         response = FileResponse(open(document.file.path, 'rb'))
-#         return response
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
-#     def get_queryset(self):
-#         # protect “AnonymousUser” is not a valid UUID
-#         if not self.request.user.is_anonymous:
-#             new_queryset = Document.objects.filter(owner=self.request.user)
-#             return new_queryset
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return GetDocumentSerializer
 
-#     def perform_create(self, serializer):
-#         serializer.save(owner=self.request.user)
+        return DocumentSerializer
 
+
+# @action(["get"], Trueurl_name='download_document', permission_classes=())
+# def download(self, request, pk):
+#     context_400 = {"Access denied": "document is private"}
+#     document = Document.objects.get(pk=pk)
+
+#     if not document.public and request.user != document.owner:
+#         return Response(context_400, status=status.HTTP_400_BAD_REQUEST)
+
+#     response = FileResponse(open(document.file.path, 'rb'))
+#     return response
 
 # class DocumentsPackageViewSet(viewsets.ModelViewSet):
 #     queryset = DocumentsPackage.objects.all()

@@ -5,11 +5,16 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter as Router
 
-from .views import TemplateViewSet
+from .views import (
+    DocumentViewSet,
+    TemplateViewSet,
+)
 
 
 router = Router()
+router.register('documents', DocumentViewSet, 'documents')
 router.register('templates', TemplateViewSet, 'templates')
+
 
 urlpatterns = [
     path('', include(router.urls)),

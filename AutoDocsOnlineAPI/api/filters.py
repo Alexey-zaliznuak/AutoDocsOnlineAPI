@@ -4,7 +4,7 @@ from django_filters import (
     BooleanFilter,
 )
 
-from documents.models import Template
+from documents.models import Document, Template
 from users.models import User
 
 
@@ -24,3 +24,14 @@ class FilterTemplate(FilterSet):
     class Meta:
         model = Template
         fields = ('author', 'is_official')
+
+
+class FilterDocument(FilterSet):
+    author = ModelChoiceFilter(
+        queryset=User.objects.all(),
+        to_field_name='username'
+    )
+
+    class Meta:
+        model = Document
+        fields = ('author',)

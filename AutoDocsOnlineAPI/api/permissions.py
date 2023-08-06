@@ -4,7 +4,7 @@ from rest_framework import permissions
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """
     True for all safe method, if method not is safe
-    then return true if user is author or has a token.
+    then return true if user is author.
     """
 
     message = 'You cannot edit an object if you are not its author.'
