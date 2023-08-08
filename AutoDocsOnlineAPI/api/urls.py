@@ -8,12 +8,18 @@ from rest_framework.routers import DefaultRouter as Router
 from .views import (
     DocumentViewSet,
     TemplateViewSet,
+    UserDefaultTemplateValueViewSet,
 )
 
 
 router = Router()
 router.register('documents', DocumentViewSet, 'documents')
 router.register('templates', TemplateViewSet, 'templates')
+router.register(
+    'default_templates_values',
+    UserDefaultTemplateValueViewSet,
+    'default_templates_values'
+)
 
 
 urlpatterns = [

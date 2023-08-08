@@ -4,7 +4,7 @@ from django_filters import (
     BooleanFilter,
 )
 
-from documents.models import Document, Template
+from documents.models import Document, Template, UserDefaultTemplateValue
 from users.models import User
 
 
@@ -35,3 +35,17 @@ class FilterDocument(FilterSet):
     class Meta:
         model = Document
         fields = ('author',)
+
+
+class FilterUserDefaultTemplateValue(FilterSet):
+    is_official = BooleanFilter(method='filter_is_official')
+
+    def filter_is_official(self, queryset, field_name, value):
+        queryset = queryset.filter(
+            template__is_official=value
+        )
+        return queryset
+
+    class Meta:
+        model = UserDefaultTemplateValue
+        fields = ('is_official',)

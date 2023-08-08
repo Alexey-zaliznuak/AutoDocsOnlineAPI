@@ -1,25 +1,41 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters
+from rest_framework.generics import get_object_or_404 as _get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
 from documents.models import (
     Document,
     Template,
+    UserDefaultTemplateValue,
 )
 
 from .filters import (
     FilterDocument,
     FilterTemplate,
+    FilterUserDefaultTemplateValue,
 )
-from .permissions import IsAuthorOrReadOnly
+from .permissions import SelfRelated, IsAuthorOrReadOnly
 from .serializers import (
-    DocumentSerializer,
     GetDocumentSerializer,
     TemplateSerializer,
+    CreateUpdateDocumentSerializer,
+    GetUserDefaultTemplateValueSerializer,
+    CreateUpdateUserDefaultTemplateValueSerializer,
 )
 
 
 HTTP_METHOD_NAMES_WITHOUT_PUT = ('get', 'post', 'patch', 'delete',)
+
+
+class GetCreateUpdateViewSet(
+    viewsets.mixins.CreateModelMixin,
+    viewsets.mixins.RetrieveModelMixin,
+    viewsets.mixins.ListModelMixin,
+    viewsets.mixins.UpdateModelMixin,
+    viewsets.GenericViewSet
+):
+    "Model viewset without delete."
+    pass
 
 
 class TemplateViewSet(viewsets.ModelViewSet):
@@ -42,7 +58,6 @@ class DocumentViewSet(viewsets.ModelViewSet):
     http_method_names = HTTP_METHOD_NAMES_WITHOUT_PUT
 
     queryset = Document.objects.all()
-    serializer_class = DocumentSerializer
 
     filterset_class = FilterDocument
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
@@ -55,7 +70,45 @@ class DocumentViewSet(viewsets.ModelViewSet):
         if self.request.method == 'GET':
             return GetDocumentSerializer
 
-        return DocumentSerializer
+        return CreateUpdateDocumentSerializer
+
+
+class UserDefaultTemplateValueViewSet(GetCreateUpdateViewSet):
+    permission_classes = (IsAuthenticated, SelfRelated,)
+    http_method_names = HTTP_METHOD_NAMES_WITHOUT_PUT
+
+    lookup_url_kwarg = 'template_title'
+    lookup_field = 'template_value__template__title'
+
+    filterset_class = FilterUserDefaultTemplateValue
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('^template__title',)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return GetUserDefaultTemplateValueSerializer
+
+        return CreateUpdateUserDefaultTemplateValueSerializer
+
+    def get_queryset(self):
+        # To avoid mistakes during schema generation
+        if not self.request.user.is_anonymous:
+
+            return UserDefaultTemplateValue.objects.filter(
+                user=self.request.user
+            )
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        filter_kwargs = {self.lookup_field: self.kwargs[self.lookup_url_kwarg]}
+
+        obj = _get_object_or_404(queryset, **filter_kwargs)
+        self.check_object_permissions(self.request, obj)
+
+        return obj
 
 
 # @action(["get"], Trueurl_name='download_document', permission_classes=())
