@@ -23,7 +23,6 @@ from .serializers import (
 class UserMixin(
     mixins.UpdateModelMixin,
     mixins.RetrieveModelMixin,
-    mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
     pass
@@ -36,7 +35,7 @@ class UserViewSet(UserMixin):
     filter_backends = (filters.SearchFilter, )
     pagination_class = StandardResultsSetPagination
     lookup_field = 'username'
-    http_method_names = ['get', 'post', 'delete']
+    http_method_names = ['get', 'post',]
 
     @action(
         methods=['get', 'patch', 'delete'],
@@ -51,8 +50,6 @@ class UserViewSet(UserMixin):
         self.kwargs.update(username=request.user.username)
         if request.method == 'PATCH':
             return self.partial_update(request, request.user.username)
-        elif request.method == 'DELETE':
-            return self.destroy(request, request.user.username)
 
         return self.retrieve(request, request.user.username)
 
