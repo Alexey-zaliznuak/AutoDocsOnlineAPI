@@ -2,6 +2,7 @@ import base64
 
 from django.core.files.base import ContentFile
 from rest_framework import serializers
+from rest_framework.utils import model_meta
 
 
 class Base64FileField(serializers.FileField):
@@ -29,3 +30,25 @@ class Base64FileField(serializers.FileField):
         data = ContentFile(base64.b64decode(data), name=file_name)
 
         return super().to_internal_value(data)
+
+
+class ModelWithUpdateForM2MFields(serializers.ModelSerializer):
+    "Model serializer with update method for models with M2M fields."
+
+    def update(self, instance, validated_data):
+        info = model_meta.get_field_info(instance)
+
+        m2m_fields = []
+        for attr, value in validated_data.items():
+            if attr in info.relations and info.relations[attr].to_many:
+                m2m_fields.append((attr, value))
+            else:
+                setattr(instance, attr, value)
+
+        instance.save()
+
+        for attr, value in m2m_fields:
+            field = getattr(instance, attr)
+            field.set(value)
+
+        return instance
