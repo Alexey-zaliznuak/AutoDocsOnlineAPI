@@ -7,6 +7,7 @@ from rest_framework.routers import DefaultRouter as Router
 
 from .views import (
     DocumentViewSet,
+    DocumentsPackageViewSet,
     TemplateViewSet,
     UserDefaultTemplateValueViewSet,
 )
@@ -19,6 +20,11 @@ router.register(
     'default_templates_values',
     UserDefaultTemplateValueViewSet,
     'default_templates_values'
+)
+router.register(
+    'documents_packages',
+    DocumentsPackageViewSet,
+    'documents_packages'
 )
 
 

@@ -5,22 +5,26 @@ from rest_framework.permissions import IsAuthenticated
 
 from documents.models import (
     Document,
+    DocumentsPackage,
     Template,
     UserDefaultTemplateValue,
 )
 
 from .filters import (
     FilterDocument,
+    FilterDocumentPackage,
     FilterTemplate,
     FilterUserDefaultTemplateValue,
 )
 from .permissions import SelfRelated, IsAuthorOrReadOnly
 from .serializers import (
-    GetDocumentSerializer,
-    TemplateSerializer,
+    CreateUpdateDocumentsPackageSerializer,
     CreateUpdateDocumentSerializer,
-    GetUserDefaultTemplateValueSerializer,
     CreateUpdateUserDefaultTemplateValueSerializer,
+    GetDocumentsPackageSerializer,
+    GetDocumentSerializer,
+    GetUserDefaultTemplateValueSerializer,
+    TemplateSerializer,
 )
 
 
@@ -109,6 +113,26 @@ class UserDefaultTemplateValueViewSet(GetCreateUpdateViewSet):
         self.check_object_permissions(self.request, obj)
 
         return obj
+
+
+class DocumentsPackageViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, IsAuthorOrReadOnly,)
+    http_method_names = HTTP_METHOD_NAMES_WITHOUT_PUT
+
+    queryset = DocumentsPackage.objects.all()
+
+    filterset_class = FilterDocumentPackage
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('^title',)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return GetDocumentsPackageSerializer
+
+        return CreateUpdateDocumentsPackageSerializer
 
 
 # @action(["get"], Trueurl_name='download_document', permission_classes=())

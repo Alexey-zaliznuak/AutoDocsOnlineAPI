@@ -4,6 +4,7 @@ from rest_framework import serializers
 from core.serializers import Base64FileField, ModelWithUpdateForM2MFields
 from documents.models import (
     Document,
+    DocumentsPackage,
     Template,
     TemplateValue,
     UserDefaultTemplateValue,
@@ -23,42 +24,6 @@ class TemplateSerializer(serializers.ModelSerializer):
             'name_in_document',
         )
         read_only_fields = ('id', 'author', 'is_official',)
-
-
-class CreateUpdateDocumentSerializer(ModelWithUpdateForM2MFields):
-    title = serializers.CharField(
-        min_length=settings.DOCUMENT_TITLE_MIN_LENGTH,
-        max_length=settings.DOCUMENT_TITLE_MAX_LENGTH
-    )
-    description = serializers.CharField(
-        required=False,
-        max_length=settings.DOCUMENT_DESCRIPTION_MAX_LENGTH
-    )
-    file = Base64FileField(required=True)
-    templates = serializers.PrimaryKeyRelatedField(
-        queryset=Template.objects.all(), many=True
-    )
-
-    class Meta:
-        model = Document
-        fields = (
-            'id',
-            'author',
-            'title',
-            'description',
-            'file',
-            'templates',
-            'creation_date',
-        )
-        read_only_fields = ('id', 'author', 'creation_date')
-
-    def create(self, validated_data):
-        templates = validated_data.pop('templates')
-
-        document = Document.objects.create(**validated_data)
-        document.templates.set(templates)
-
-        return document
 
 
 class GetDocumentTemplateSerializer(TemplateSerializer):
@@ -90,6 +55,34 @@ class GetDocumentSerializer(serializers.ModelSerializer):
             'templates',
             'creation_date',
         )
+
+
+class CreateUpdateDocumentSerializer(ModelWithUpdateForM2MFields):
+    file = Base64FileField(required=True)
+    templates = serializers.PrimaryKeyRelatedField(
+        queryset=Template.objects.all(), many=True
+    )
+
+    class Meta:
+        model = Document
+        fields = (
+            'id',
+            'author',
+            'title',
+            'description',
+            'file',
+            'templates',
+            'creation_date',
+        )
+        read_only_fields = ('id', 'author', 'creation_date')
+
+    def create(self, validated_data):
+        templates = validated_data.pop('templates')
+
+        document = Document.objects.create(**validated_data)
+        document.templates.set(templates)
+
+        return document
 
 
 class CreateUpdateTemplateValueSerializer(serializers.ModelSerializer):
@@ -167,59 +160,52 @@ class CreateUpdateUserDefaultTemplateValueSerializer(
         return instance
 
 
-# class GetRecipeSerializer(RecipeSerializer):
-#     author = UserSerializer()
-#     tags = TagSerializer(many=True)
-#     ingredients = IngredientAmountSerializer(many=True)
-#     is_favorited = serializers.SerializerMethodField()
-#     is_in_shopping_cart = serializers.SerializerMethodField()
+class GetDocumentPackageDocumentSerializer(serializers.ModelSerializer):
+    templates = GetDocumentTemplateSerializer(many=True)
 
-#     class Meta:
-#         model = Recipe
-#         fields = (
-#             'id',
-#             'tags',
-#             'author',
-#             'ingredients',
-#             'name',
-#             'image',
-#             'text',
-#             'cooking_time',
-#             'is_favorited',
-#             'is_in_shopping_cart',
-#         )
-#         read_only_fields = ('id', 'author')
-
-#     def get_is_favorited(self, recipe):
-#         return Favorite.objects.filter(
-#             Q(user=self.context['request'].user.id) & Q(recipe=recipe)
-#         ).exists()
-
-#     def get_is_in_shopping_cart(self, recipe):
-#         return ShoppingCart.objects.filter(
-#             Q(user=self.context['request'].user.id) & Q(recipe=recipe)
-#         ).exists()
+    class Meta:
+        model = Document
+        fields = (
+            'id',
+            'title',
+            'description',
+            'file',
+            'templates',
+        )
 
 
-# class DocumentSerializer(serializers.ModelSerializer):
-#     author = serializers.PrimaryKeyRelatedField(
-#         read_only=True
-#     )
-#     file = Base64FileField()
+class GetDocumentsPackageSerializer(serializers.ModelSerializer):
+    author = UserSerializer()
+    documents = GetDocumentPackageDocumentSerializer(many=True)
 
-#     class Meta:
-#         fields = '__all__'
-#         model = Document
+    class Meta:
+        model = DocumentsPackage
+        fields = (
+            'id',
+            'title',
+            'author',
+            'documents',
+        )
 
 
-# class DocumentsPackageSerializer(serializers.ModelSerializer):
-#     owner = serializers.PrimaryKeyRelatedField(
-#         pk_field=serializers.CharField(),
-#         source='owner.username',
-#         read_only=True
-#     )
+class CreateUpdateDocumentsPackageSerializer(ModelWithUpdateForM2MFields):
+    documents = serializers.PrimaryKeyRelatedField(
+        queryset=Document.objects.all(), many=True
+    )
 
-#     class Meta:
-#         fields = '__all__'
-#         model = DocumentsPackage
-#         read_only_fields = ('owner',)
+    class Meta:
+        model = DocumentsPackage
+        fields = (
+            'title',
+            'author',
+            'documents',
+        )
+        read_only_fields = ('author',)
+
+    def create(self, validated_data):
+        documents = validated_data.pop('documents')
+
+        documents_package = DocumentsPackage.objects.create(**validated_data)
+        documents_package.documents.set(documents)
+
+        return documents_package

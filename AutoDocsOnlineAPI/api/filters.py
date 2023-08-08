@@ -4,7 +4,12 @@ from django_filters import (
     BooleanFilter,
 )
 
-from documents.models import Document, Template, UserDefaultTemplateValue
+from documents.models import (
+    Document,
+    DocumentsPackage,
+    Template,
+    UserDefaultTemplateValue,
+)
 from users.models import User
 
 
@@ -49,3 +54,14 @@ class FilterUserDefaultTemplateValue(FilterSet):
     class Meta:
         model = UserDefaultTemplateValue
         fields = ('is_official',)
+
+
+class FilterDocumentPackage(FilterSet):
+    author = ModelChoiceFilter(
+        queryset=User.objects.all(),
+        to_field_name='username'
+    )
+
+    class Meta:
+        model = DocumentsPackage
+        fields = ('author',)
