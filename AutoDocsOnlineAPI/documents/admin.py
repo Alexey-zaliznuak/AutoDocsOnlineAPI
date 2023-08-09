@@ -24,7 +24,7 @@ HTML_LINK = '<a href={url}>{title}</a>'
 
 class DocumentDocumentsPackageInline(admin.TabularInline):
     model = DocumentDocumentsPackage
-    fk_name = 'document_package'
+    fk_name = 'documents_package'
     extra = 1
 
 
@@ -177,15 +177,15 @@ class DocumentsPackageAdmin(admin.ModelAdmin):
 @admin.register(DocumentDocumentsPackage)
 class DocumentDocumentsPackageAdmin(admin.ModelAdmin):
     list_display = (
-        'document_package_',
+        'documents_package_',
         'document_',
         'pk_',
     )
     empty_value_display = '-empty-'
 
-    @admin.display(empty_value='unknown', description="document_package")
-    def document_package_(self, obj):
-        return object_url(obj.document_package)
+    @admin.display(empty_value='unknown', description="documents_package")
+    def documents_package_(self, obj):
+        return object_url(obj.documents_package)
 
     @admin.display(empty_value='unknown', description="document")
     def document_(self, obj):
@@ -223,7 +223,7 @@ class RecordAdmin(admin.ModelAdmin):
     inlines = [RecordTemplateValueInline]
     list_display = (
         'user_',
-        'document_package_',
+        'documents_package_',
         'templates_values_',
         'pk_',
     )
@@ -240,9 +240,9 @@ class RecordAdmin(admin.ModelAdmin):
             HTML_NEW_LINE.join(map(object_url, obj.templates_values.all()))
         )
 
-    @admin.display(empty_value='unknown', description="document_package")
-    def document_package_(self, obj):
-        return object_url(obj.document_package)
+    @admin.display(empty_value='unknown', description="documents_package")
+    def documents_package_(self, obj):
+        return object_url(obj.documents_package)
 
     @admin.display(empty_value='unknown', description="pk")
     def pk_(self, obj):

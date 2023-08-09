@@ -137,9 +137,9 @@ class Document(CreatedModel):
 class DocumentsPackage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(
-        max_length=settings.DOCUMENT_PACKAGE_TITLE_MAX_LENGTH,
+        max_length=settings.DOCUMENTS_PACKAGE_TITLE_MAX_LENGTH,
         validators=[
-            MinLengthValidator(settings.DOCUMENT_PACKAGE_TITLE_MIN_LENGTH)
+            MinLengthValidator(settings.DOCUMENTS_PACKAGE_TITLE_MIN_LENGTH)
         ],
         unique=True
     )
@@ -167,7 +167,7 @@ class Record(CreatedModel):
         models.CASCADE,
         related_name='records'
     )
-    document_package = models.ForeignKey(
+    documents_package = models.ForeignKey(
         DocumentsPackage,
         models.CASCADE,
         related_name='records'
@@ -185,7 +185,7 @@ class Record(CreatedModel):
         return ' '.join(
             map(
                 str,
-                [self.user, self.document_package, self.creation_date]
+                [self.user, self.documents_package, self.creation_date]
             )
         )
 
@@ -195,9 +195,9 @@ class DocumentDocumentsPackage(models.Model):
     document = models.ForeignKey(
         Document,
         models.CASCADE,
-        related_name='document_packages'
+        related_name='documents_packages'
     )
-    document_package = models.ForeignKey(
+    documents_package = models.ForeignKey(
         DocumentsPackage,
         models.CASCADE,
     )
@@ -205,15 +205,15 @@ class DocumentDocumentsPackage(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=('document', 'document_package'),
-                name='document_document_package_unique'
+                fields=('document', 'documents_package'),
+                name='document_documents_package_unique'
             )
         ]
         verbose_name = 'DocumentDocumentsPackage'
         verbose_name_plural = "DocumentDocumentsPackages"
 
     def __str__(self):
-        return ' '.join(map(str, [self.document, self.document_package]))
+        return ' '.join(map(str, [self.document, self.documents_package]))
 
 
 class DocumentTemplate(models.Model):
