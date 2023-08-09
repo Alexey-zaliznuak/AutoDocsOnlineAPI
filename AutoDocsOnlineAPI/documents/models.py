@@ -180,6 +180,7 @@ class Record(CreatedModel):
     class Meta:
         verbose_name = 'Record'
         verbose_name_plural = "Records"
+        ordering = ['creation_date']
 
     def __str__(self):
         return ' '.join(
