@@ -9,9 +9,6 @@ class IsAuthor(permissions.BasePermission):
     message = 'You cannot wotk with object if you are not it`s author.'
 
     def has_object_permission(self, request, view, obj):
-        print('hello', flush=True)
-        print(obj.author.username)
-        print(request.user.username)
         return obj.author == request.user
 
 
