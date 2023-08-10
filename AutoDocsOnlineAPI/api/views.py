@@ -1,11 +1,15 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters
+from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404 as _get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
 
 from documents.models import (
     Document,
     DocumentsPackage,
+    Record,
     Template,
     UserDefaultTemplateValue,
 )
@@ -13,16 +17,25 @@ from documents.models import (
 from .filters import (
     FilterDocument,
     FilterDocumentPackage,
+    FilterRecords,
     FilterTemplate,
     FilterUserDefaultTemplateValue,
 )
-from .permissions import SelfRelated, IsAuthorOrReadOnly
+from .permissions import (
+    IsAuthor,
+    SelfRelated,
+    IsAuthorOrReadOnly,
+    SelfRelatedOrIsDocumentPackageAuthor
+)
 from .serializers import (
+    CreateUpdateRecordSerializer,
     CreateUpdateDocumentsPackageSerializer,
     CreateUpdateDocumentSerializer,
     CreateUpdateUserDefaultTemplateValueSerializer,
     GetDocumentsPackageSerializer,
+    GetDocumentsPackageRecordsSerializer,
     GetDocumentSerializer,
+    GetSelfRecordsSerializer,
     GetUserDefaultTemplateValueSerializer,
     TemplateSerializer,
 )
@@ -39,6 +52,14 @@ class GetCreateUpdateViewSet(
     viewsets.GenericViewSet
 ):
     "Model viewset without delete."
+    pass
+
+
+class ListCreateViewSet(
+    viewsets.mixins.ListModelMixin,
+    viewsets.mixins.CreateModelMixin,
+    viewsets.GenericViewSet
+):
     pass
 
 
@@ -133,6 +154,49 @@ class DocumentsPackageViewSet(viewsets.ModelViewSet):
             return GetDocumentsPackageSerializer
 
         return CreateUpdateDocumentsPackageSerializer
+
+
+class RecordsViewSet(ListCreateViewSet):
+    permission_classes = (
+        IsAuthenticated, SelfRelatedOrIsDocumentPackageAuthor,
+    )
+    http_method_names = HTTP_METHOD_NAMES_WITHOUT_PUT
+
+    filterset_class = FilterRecords
+    filter_backends = (DjangoFilterBackend,)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return GetSelfRecordsSerializer
+
+        return CreateUpdateRecordSerializer
+
+    def get_queryset(self):
+        # To avoid mistakes during schema generation
+        if not self.request.user.is_anonymous:
+            return Record.objects.filter(
+                user=self.request.user
+            )
+
+    @action(
+        ['get'],
+        False,
+        url_path='documents_package/(?P<pk>[^/.]+)',
+        permission_classes=(IsAuthor,),
+        filterset_class=None,
+    )
+    def documents_package_records(self, request, pk=None):
+        documents_package = DocumentsPackage.objects.get(pk=pk)
+
+        self.check_object_permissions(request, documents_package)
+
+        records = Record.objects.filter(documents_package=documents_package)
+        serializer = GetDocumentsPackageRecordsSerializer(records, many=True)
+
+        return Response(serializer.data)
 
 
 # @action(["get"], Trueurl_name='download_document', permission_classes=())

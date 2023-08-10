@@ -1,10 +1,12 @@
 from django.conf import settings
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from core.serializers import Base64FileField, ModelWithUpdateForM2MFields
 from documents.models import (
     Document,
     DocumentsPackage,
+    Record,
     Template,
     TemplateValue,
     UserDefaultTemplateValue,
@@ -160,7 +162,7 @@ class CreateUpdateUserDefaultTemplateValueSerializer(
         return instance
 
 
-class GetDocumentPackageDocumentSerializer(serializers.ModelSerializer):
+class GetDocumentsPackageDocumentSerializer(serializers.ModelSerializer):
     templates = GetDocumentTemplateSerializer(many=True)
 
     class Meta:
@@ -176,7 +178,7 @@ class GetDocumentPackageDocumentSerializer(serializers.ModelSerializer):
 
 class GetDocumentsPackageSerializer(serializers.ModelSerializer):
     author = UserSerializer()
-    documents = GetDocumentPackageDocumentSerializer(many=True)
+    documents = GetDocumentsPackageDocumentSerializer(many=True)
 
     class Meta:
         model = DocumentsPackage
@@ -209,3 +211,122 @@ class CreateUpdateDocumentsPackageSerializer(ModelWithUpdateForM2MFields):
         documents_package.documents.set(documents)
 
         return documents_package
+
+
+class GetSimpleTemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Template
+        fields = (
+            'id',
+            'title',
+        )
+
+
+class GetSimpleDocumentsPackageSerializer(
+    serializers.ModelSerializer
+):
+    """
+    Serializer for serialize DocumentPackage
+    return only id and title value
+    """
+    class Meta:
+        model = DocumentsPackage
+        fields = (
+            'id',
+            'title'
+        )
+
+
+class GetSimpleTemplateValueSerializer(serializers.ModelSerializer):
+    template = GetSimpleTemplateSerializer()
+
+    class Meta:
+        model = TemplateValue
+        fields = (
+            'template',
+            'value',
+        )
+
+
+class GetSelfRecordsSerializer(serializers.ModelSerializer):
+    documents_package = GetSimpleDocumentsPackageSerializer()
+    templates_values = GetSimpleTemplateValueSerializer(many=True)
+
+    class Meta:
+        model = Record
+        fields = (
+            'id',
+            'documents_package',
+            'templates_values',
+            'creation_date',
+        )
+
+
+class GetDocumentsPackageRecordsSerializer(serializers.ModelSerializer):
+    templates_values = GetSimpleTemplateValueSerializer(many=True)
+
+    class Meta:
+        model = Record
+        fields = (
+            'user',
+            'templates_values',
+            'creation_date',
+        )
+
+
+class CreateUpdateRecordSerializer(serializers.ModelSerializer):
+    templates_values = CreateUpdateTemplateValueSerializer(many=True)
+
+    class Meta:
+        model = Record
+        fields = (
+            'documents_package',
+            'templates_values',
+        )
+        read_only_fields = (
+            'creation_date',
+        )
+        create_only_fields = 'documents_package'
+
+    def create(self, validated_data):
+        templates_values = validated_data.pop('templates_values')
+
+        for index, template_value in enumerate(templates_values):
+            templates_values[index], _ = TemplateValue.objects.get_or_create(
+                **template_value
+            )
+
+        record = Record.objects.create(**validated_data)
+        record.templates_values.set(templates_values)
+
+        return record
+
+    def validate_templates_values(self, value):
+        templates = []
+
+        for template_value in value:
+            template = template_value.get('template')
+
+            if template in templates:
+                raise ValidationError('Duplicate templates')
+
+            templates.append(template)
+
+        return value
+
+    def validate(self, data):
+        templates_values = data.get('templates_values')
+        templates = data.get('documents_package').templates
+        request_templates = map(
+            lambda el: el.get('template'), templates_values
+        )
+
+        if len(templates_values) != len(templates):
+            raise ValidationError(
+                "Uncorrect templates for this document package."
+            )
+
+        if set(request_templates) != set(templates):
+            raise ValidationError('Uncorrect templates')
+
+        return super().validate(data)

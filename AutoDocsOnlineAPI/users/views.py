@@ -21,7 +21,6 @@ from .serializers import (
 
 
 class UserMixin(
-    mixins.UpdateModelMixin,
     mixins.RetrieveModelMixin,
     viewsets.GenericViewSet,
 ):
@@ -35,7 +34,7 @@ class UserViewSet(UserMixin):
     filter_backends = (filters.SearchFilter, )
     pagination_class = StandardResultsSetPagination
     lookup_field = 'username'
-    http_method_names = ['get', 'post',]
+    http_method_names = ['get', 'post', 'patch']
 
     @action(
         methods=['get', 'patch', 'delete'],

@@ -7,6 +7,7 @@ from rest_framework.routers import DefaultRouter as Router
 
 from .views import (
     DocumentViewSet,
+    RecordsViewSet,
     DocumentsPackageViewSet,
     TemplateViewSet,
     UserDefaultTemplateValueViewSet,
@@ -26,6 +27,7 @@ router.register(
     DocumentsPackageViewSet,
     'documents_packages'
 )
+router.register('records', RecordsViewSet, 'records')
 
 
 urlpatterns = [

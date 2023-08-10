@@ -159,6 +159,14 @@ class DocumentsPackage(models.Model):
     def __str__(self):
         return ' '.join(map(str, [self.author, self.title]))
 
+    @property
+    def templates(self) -> list[Template]:
+        templates = []
+        for el in self.documents.all():
+            templates.extend(el.templates.all())
+
+        return set(templates)
+
 
 class Record(CreatedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

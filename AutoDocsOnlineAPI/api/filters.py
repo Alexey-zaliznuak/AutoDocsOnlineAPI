@@ -7,6 +7,7 @@ from django_filters import (
 from documents.models import (
     Document,
     DocumentsPackage,
+    Record,
     Template,
     UserDefaultTemplateValue,
 )
@@ -65,3 +66,14 @@ class FilterDocumentPackage(FilterSet):
     class Meta:
         model = DocumentsPackage
         fields = ('author',)
+
+
+class FilterRecords(FilterSet):
+    document_package = ModelChoiceFilter(
+        queryset=DocumentsPackage.objects.all(),
+        to_field_name='title'
+    )
+
+    class Meta:
+        model = Record
+        fields = ('document_package',)
