@@ -1,3 +1,6 @@
+from django.shortcuts import get_list_or_404
+from core.documents_fromatter import DocumentsFormatter
+from django.http.response import FileResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters
 from rest_framework.decorators import action
@@ -25,12 +28,13 @@ from .permissions import (
     IsAuthor,
     SelfRelated,
     IsAuthorOrReadOnly,
-    SelfRelatedOrIsDocumentPackageAuthor
+    SelfRelatedOrIsDocumentsPackageAuthor,
 )
 from .serializers import (
     CreateUpdateRecordSerializer,
     CreateUpdateDocumentsPackageSerializer,
     CreateUpdateDocumentSerializer,
+    DownloadRecordDocumentSerializer,
     CreateUpdateUserDefaultTemplateValueSerializer,
     GetDocumentsPackageSerializer,
     GetDocumentsPackageRecordsSerializer,
@@ -158,7 +162,7 @@ class DocumentsPackageViewSet(viewsets.ModelViewSet):
 
 class RecordsViewSet(ListCreateViewSet):
     permission_classes = (
-        IsAuthenticated, SelfRelatedOrIsDocumentPackageAuthor,
+        IsAuthenticated, SelfRelatedOrIsDocumentsPackageAuthor,
     )
     http_method_names = HTTP_METHOD_NAMES_WITHOUT_PUT
 
@@ -189,14 +193,55 @@ class RecordsViewSet(ListCreateViewSet):
         filterset_class=None,
     )
     def documents_package_records(self, request, pk=None):
-        documents_package = DocumentsPackage.objects.get(pk=pk)
+        documents_package = get_list_or_404(DocumentsPackage, pk=pk)
 
         self.check_object_permissions(request, documents_package)
 
-        records = Record.objects.filter(documents_package=documents_package)
+        records = get_list_or_404(Record, documents_package=documents_package)
         serializer = GetDocumentsPackageRecordsSerializer(records, many=True)
 
         return Response(serializer.data)
+
+    @action(
+        ['get'],
+        True,
+        url_path='download/(?P<document_id>[^/.]+)',
+        permission_classes=(SelfRelatedOrIsDocumentsPackageAuthor,),
+        filterset_class=None,
+    )
+    def download_filled_document(self, request, pk, document_id):
+        templates_values_primitive = {}
+
+        serializer = DownloadRecordDocumentSerializer(
+            data={
+                'record': pk,
+                'document_id': document_id
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+
+        record = serializer.validated_data.get('record')
+        self.check_object_permissions(request, record)
+
+        document_id = serializer.validated_data.get('document_id')
+        document = record.documents_package.documents.get(
+            pk=document_id
+        )
+
+        templates_values = record.templates_values.all()
+
+        for tv in templates_values:
+            templates_values_primitive[tv.template.name_in_document] = tv.value
+
+        data = DocumentsFormatter(
+                document.file.path,
+                templates_values_primitive
+            ).format()
+
+        return FileResponse(
+            data,
+            filename=document.file.name.split('/')[-1]
+        )
 
 
 # @action(["get"], Trueurl_name='download_document', permission_classes=())

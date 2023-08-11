@@ -69,11 +69,11 @@ class FilterDocumentPackage(FilterSet):
 
 
 class FilterRecords(FilterSet):
-    document_package = ModelChoiceFilter(
+    documents_package = ModelChoiceFilter(
         queryset=DocumentsPackage.objects.all(),
         to_field_name='title'
     )
 
     class Meta:
         model = Record
-        fields = ('document_package',)
+        fields = ('documents_package',)

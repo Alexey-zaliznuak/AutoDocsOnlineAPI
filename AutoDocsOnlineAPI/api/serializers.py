@@ -330,3 +330,24 @@ class CreateUpdateRecordSerializer(serializers.ModelSerializer):
             raise ValidationError('Uncorrect templates')
 
         return super().validate(data)
+
+
+class DownloadRecordDocumentSerializer(serializers.Serializer):
+    record = serializers.PrimaryKeyRelatedField(
+        queryset=Record.objects.all()
+    )
+    document_id = serializers.UUIDField()
+
+    def validate(self, data):
+        record = data.get('record')
+        document_id = data.get('document_id')
+
+        if not record.documents_package.documents.filter(
+            pk=document_id
+        ).exists():
+            raise ValidationError(
+                "Document with this id and "
+                "related with this record does not exist."
+            )
+
+        return data

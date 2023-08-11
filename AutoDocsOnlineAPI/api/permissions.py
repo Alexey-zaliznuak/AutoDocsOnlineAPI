@@ -38,7 +38,7 @@ class SelfRelated(permissions.BasePermission):
         return obj.user == request.user
 
 
-class SelfRelatedOrIsDocumentPackageAuthor(permissions.BasePermission):
+class SelfRelatedOrIsDocumentsPackageAuthor(permissions.BasePermission):
     """
     Permission for RecordViewSet.
     Return True if user is request user or
@@ -50,5 +50,5 @@ class SelfRelatedOrIsDocumentPackageAuthor(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return (
             request.user == obj.user
-            or request.user == obj.document_package.author
+            or request.user == obj.documents_package.author
         )
