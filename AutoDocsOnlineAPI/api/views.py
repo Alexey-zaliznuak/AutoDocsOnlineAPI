@@ -234,39 +234,11 @@ class RecordsViewSet(ListCreateViewSet):
             templates_values_primitive[tv.template.name_in_document] = tv.value
 
         data = DocumentsFormatter(
-                document.file.path,
-                templates_values_primitive
-            ).format()
+            document.file.path,
+            templates_values_primitive
+        ).format()
 
         return FileResponse(
             data,
             filename=document.file.name.split('/')[-1]
         )
-
-
-# @action(["get"], Trueurl_name='download_document', permission_classes=())
-# def download(self, request, pk):
-#     context_400 = {"Access denied": "document is private"}
-#     document = Document.objects.get(pk=pk)
-
-#     if not document.public and request.user != document.owner:
-#         return Response(context_400, status=status.HTTP_400_BAD_REQUEST)
-
-#     response = FileResponse(open(document.file.path, 'rb'))
-#     return response
-
-# class DocumentsPackageViewSet(viewsets.ModelViewSet):
-#     queryset = DocumentsPackage.objects.all()
-#     serializer_class = DocumentsPackageSerializer
-#     permission_classes = (IsAuthorOrReadOnly,)
-
-#     def get_queryset(self):
-#         # protect “AnonymousUser” is not a valid UUID
-#         if not self.request.user.is_anonymous:
-#             new_queryset = DocumentsPackage.objects.filter(
-#                 owner=self.request.user
-#             )
-#             return new_queryset
-
-#     def perform_create(self, serializer):
-#         serializer.save(owner=self.request.user)
