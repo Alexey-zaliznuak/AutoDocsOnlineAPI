@@ -2,15 +2,24 @@ author,title,name_in_document,description,is_official
 Administrator,ФИО,{{full_name}},"""Фамилия, имя и отчество""",1
 Administrator,Телефон,{{telephone_number}},Номер телфона,1
 Administrator,Место жительства,{{place_of_residence}},,1
+Administrator,Серия паспорта,{{passport_series}},,1
+Administrator,Номер паспорта,{{passport_number}},,1
+Administrator,Дата выдачи паспорта,{{passport_date_of_issue}},,1
 
 Administrator,ФИО родителя,{{parent_full_name}},ФИО родителя (законного представителя),1
 Administrator,Телефон родителя,{{parent_telephone_number}},,1
 Administrator,Место жительства родителя,{{parent_place_of_residence}},,1
+Administrator,Серия паспорта родителя,{{parent_passport_series}},,1
+Administrator,Номер паспорта родителя,{{parent_passport_number}},,1
+Administrator,Дата выдачи паспорта родителя,{{parent_passport_date_of_issue}},,1
 
-Administrator,Паспорт,{{passport_data}},Серия и номер паспорта,1
 Administrator,Свидетельство о рождении,{{birth certificate}},,1
 Administrator,Дата рождения,{{birth_date}},,1
 Administrator,Номер сертификата дополнительного образования,{{additional_education_certificate}},,1
+Administrator,Полис обязательного медицинского страхования,{{compulsory_medical_insurance_policy}},,1
 
+Administrator,ФИО в родительном падеже,{{full_name_in_genitive_case}},,0
+Administrator,ФИО родителя в родительном падеже,{{parent_full_name_in_genitive_case}},ФИО родителя (законного представителя) в родительном падеже,0
 Administrator,Часы / дни недели,{{hours_and_weekdays}},Часы и дни занятий согласно утвержденному расписанию,0
 Administrator,Школа / класс,{{school_and_class}},,0
+Administrator,Название выбранной программы,{{kvantorium_program_type}},,0
