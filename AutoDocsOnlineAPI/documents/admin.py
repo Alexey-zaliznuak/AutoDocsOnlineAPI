@@ -51,7 +51,12 @@ class TemplateAdmin(admin.ModelAdmin):
         'pk'
     )
     list_filter = ('is_official',)
-    search_fields = ('title', 'name_in_document', 'description',)
+    search_fields = (
+        'title',
+        'name_in_document',
+        'description',
+        'author__username'
+    )
     empty_value_display = '-empty-'
 
     @admin.display(empty_value='unknown', description="description")
