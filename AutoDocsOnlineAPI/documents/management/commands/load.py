@@ -10,13 +10,19 @@ ROWS_NAMES_INDEX = 1
 
 
 def loadcsv(file_name: str):
-    return pd.read_csv(f'{file_name}.csv', index_col=False, keep_default_na=False)
+    return pd.read_csv(
+        f'{file_name}.csv',
+        index_col=False,
+        keep_default_na=False
+    )
+
 
 def check_admin_exists():
     if not User.objects.filter(
         username=env('DJANGO_SUPERUSER_USERNAME')
     ).exists():
         raise RuntimeError('Administartor user not found.')
+
 
 def clear_row(row):
     if not row or not isinstance(row, str):
@@ -51,7 +57,7 @@ class Command(BaseCommand):
                 help=f'load {obj} data'
             )
 
-    def load_model(self, model, csv_path = None):
+    def load_model(self, model, csv_path=None):
         "For easy loads simple models."
 
         csv = loadcsv(csv_path or DATA_DIR / model.__class__.__name__.lower())
