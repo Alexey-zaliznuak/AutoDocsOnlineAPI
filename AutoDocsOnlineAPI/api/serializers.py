@@ -198,11 +198,15 @@ class CreateUpdateDocumentsPackageSerializer(ModelWithUpdateForM2MFields):
     class Meta:
         model = DocumentsPackage
         fields = (
+            'id',
             'title',
             'author',
             'documents',
         )
-        read_only_fields = ('author',)
+        read_only_fields = (
+            'id'
+            'author',
+        )
 
     def create(self, validated_data):
         documents = validated_data.pop('documents')
@@ -280,10 +284,12 @@ class CreateUpdateRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Record
         fields = (
+            'id',
             'documents_package',
             'templates_values',
         )
         read_only_fields = (
+            'id',
             'creation_date',
         )
         create_only_fields = 'documents_package'
