@@ -91,7 +91,7 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          cd AutoDocsOnline
+          cd AutoDocsOnline/infra
 
           # Pull images
           sudo docker compose -f docker-compose.production.yml pull
