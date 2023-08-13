@@ -10,12 +10,12 @@ FILLING_DATE_COLUMN_NAME = 'Дата заполнения'
 
 COL_CELL_FONT = Font(
     name='Times New Roman',
-    size=14,
+    size=12,
     bold=True,
 )
 ROW_CELL_FONT = Font(
     name='Times New Roman',
-    size=14,
+    size=12,
     color='FF000000'
 )
 
