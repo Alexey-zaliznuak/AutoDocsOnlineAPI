@@ -2,6 +2,8 @@ FROM python:3.9
 
 WORKDIR /app
 
+ENV SECRET_KEY='SECRET_KEY'
+
 COPY requirements.txt .
 
 RUN apt-get install libpq-dev
