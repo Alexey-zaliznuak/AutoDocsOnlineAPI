@@ -126,3 +126,4 @@ media/
 *.pdf
 
 test*.py
+collected_static/
