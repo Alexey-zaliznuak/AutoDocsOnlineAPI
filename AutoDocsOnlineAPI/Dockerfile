@@ -15,6 +15,7 @@ COPY . .
 
 # Static move
 RUN python manage.py collectstatic
+RUN mkdir -p /app/backend_static/static/
 RUN cp -r /app/collected_static/. /app/backend_static/static/
 
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "backend.wsgi"]
