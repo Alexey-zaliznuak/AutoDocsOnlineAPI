@@ -1,5 +1,5 @@
-from django.shortcuts import get_list_or_404
-from core.documents_fromatter import DocumentsFormatter
+from django.shortcuts import get_list_or_404, get_object_or_404
+from core.formatters import DocumentsFormatter, ExcelFormatter
 from django.http.response import FileResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters
@@ -106,8 +106,8 @@ class UserDefaultTemplateValueViewSet(GetCreateUpdateViewSet):
     permission_classes = (IsAuthenticated, SelfRelated,)
     http_method_names = HTTP_METHOD_NAMES_WITHOUT_PUT
 
-    lookup_url_kwarg = 'template_title'
-    lookup_field = 'template_value__template__title'
+    lookup_url_kwarg = 'template_pk'
+    lookup_field = 'template_value__template__id'
 
     filterset_class = FilterUserDefaultTemplateValue
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
@@ -189,11 +189,11 @@ class RecordsViewSet(ListCreateViewSet):
         ['get'],
         False,
         url_path='documents_package/(?P<pk>[^/.]+)',
-        permission_classes=(IsAuthor,),
+        permission_classes=(IsAuthenticated, IsAuthor,),
         filterset_class=None,
     )
     def documents_package_records(self, request, pk=None):
-        documents_package = get_list_or_404(DocumentsPackage, pk=pk)
+        documents_package = get_object_or_404(DocumentsPackage, pk=pk)
 
         self.check_object_permissions(request, documents_package)
 
@@ -204,14 +204,35 @@ class RecordsViewSet(ListCreateViewSet):
 
     @action(
         ['get'],
+        False,
+        url_path='documents_package/(?P<pk>[^/.]+)/download',
+        permission_classes=(IsAuthenticated, IsAuthor,),
+        filterset_class=None,
+    )
+    def download_documents_package_records(self, request, pk=None):
+        documents_package = get_object_or_404(DocumentsPackage, pk=pk)
+        self.check_object_permissions(request, documents_package)
+
+        records = get_list_or_404(Record, documents_package=documents_package)
+        templates = documents_package.templates
+
+        excel, filename = ExcelFormatter(
+            records, templates, title=documents_package.title
+        ).make_excel_data_summary()
+
+        return FileResponse(
+            excel,
+            filename=filename + '.xlsx'
+        )
+
+    @action(
+        ['get'],
         True,
         url_path='download/(?P<document_id>[^/.]+)',
         permission_classes=(SelfRelatedOrIsDocumentsPackageAuthor,),
         filterset_class=None,
     )
     def download_filled_document(self, request, pk, document_id):
-        templates_values_primitive = {}
-
         serializer = DownloadRecordDocumentSerializer(
             data={
                 'record': pk,
@@ -230,15 +251,12 @@ class RecordsViewSet(ListCreateViewSet):
 
         templates_values = record.templates_values.all()
 
-        for tv in templates_values:
-            templates_values_primitive[tv.template.name_in_document] = tv.value
-
-        data = DocumentsFormatter(
+        formatted_document = DocumentsFormatter(
             document.file.path,
-            templates_values_primitive
+            templates_values
         ).format()
 
         return FileResponse(
-            data,
+            formatted_document,
             filename=document.file.name.split('/')[-1]
         )

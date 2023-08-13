@@ -1,18 +1,18 @@
 from docx import Document
 from io import BytesIO
 
-TemplateValue = dict[str, str]
-
 
 class DocumentsFormatter:
-    def __init__(self, path, templates_values: dict):
+    def __init__(self, path, templates_values):
         """
         Format document and return
         :param templates_values is dict same `{'template':str, 'value': str}`
         """
 
         self.document = Document(path)
-        self.templates_values = templates_values
+        self.templates_values = self.__get_primitive_templates_values(
+            templates_values
+        )
 
     def format(self) -> BytesIO:
         self.__format_paragraphs()
@@ -42,3 +42,11 @@ class DocumentsFormatter:
 
     def __format(self, string: str, template: str, value: str):
         string.text = string.text.replace(template, value)
+
+    def __get_primitive_templates_values(self, templates_values):
+        res = {}
+
+        for tv in templates_values:
+            res[tv.template.name_in_document] = tv.value
+
+        return res
