@@ -51,7 +51,7 @@ class Template(models.Model):
     )
 
     class Meta:
-        ordering = ["title"]
+        ordering = ["-title"]
         verbose_name = 'Template'
         verbose_name_plural = "Templates"
 
