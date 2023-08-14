@@ -13,7 +13,7 @@ Administrator,Серия паспорта родителя,{{parent_passport_ser
 Administrator,Номер паспорта родителя,{{parent_passport_number}},,1
 Administrator,Дата выдачи паспорта родителя,{{parent_passport_date_of_issue}},,1
 
-Administrator,Свидетельство о рождении,{{birth certificate}},,1
+Administrator,Свидетельство о рождении,{{birth_certificate}},,1
 Administrator,Дата рождения,{{birth_date}},,1
 Administrator,Номер сертификата дополнительного образования,{{additional_education_certificate}},,1
 Administrator,Полис обязательного медицинского страхования,{{compulsory_medical_insurance_policy}},,1
