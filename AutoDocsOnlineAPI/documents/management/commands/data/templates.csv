@@ -17,8 +17,8 @@ Administrator,Орган выдавший паспорт родителя,{{pare
 
 Administrator,Свидетельство о рождении,{{birth_certificate}},,1
 Administrator,Дата рождения,{{birth_date}},,1
-Administrator,Номер сертификата дополнительного образования,{{additional_education_certificate}},,1
-Administrator,Полис обязательного медицинского страхования,{{compulsory_medical_insurance_policy}},,1
+Administrator,Номер сертификата дополнительного образования,{{additional_education_certificate}},Номер сертификата дополнительного образования(номер/выдан),1
+Administrator,Полис обязательного медицинского страхования,{{compulsory_medical_insurance_policy}},Полис обязательного медицинского страхования(номер/выдано),1
 
 Administrator,ФИО в родительном падеже,{{full_name_in_genitive_case}},,0
 Administrator,ФИО родителя в родительном падеже,{{parent_full_name_in_genitive_case}},ФИО родителя (законного представителя) в родительном падеже,0
