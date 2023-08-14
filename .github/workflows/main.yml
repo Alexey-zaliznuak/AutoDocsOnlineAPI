@@ -105,10 +105,6 @@ jobs:
           # Make migrations
           sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
 
-          # load base data
-          sudo docker compose -f docker-compose.production.yml exec backend python manage.py createsuperuser --noinput
-          sudo docker compose -f docker-compose.production.yml exec backend python manage.py load --templates
-
   send_message:
     runs-on: ubuntu-latest
     needs: deploy
