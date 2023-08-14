@@ -5,6 +5,7 @@ Administrator,Место жительства,{{place_of_residence}},,1
 Administrator,Серия паспорта,{{passport_series}},,1
 Administrator,Номер паспорта,{{passport_number}},,1
 Administrator,Дата выдачи паспорта,{{passport_date_of_issue}},,1
+Administrator,Орган выдавший паспорт,{{authority_issued_passport}},,1
 
 Administrator,ФИО родителя,{{parent_full_name}},ФИО родителя (законного представителя),1
 Administrator,Телефон родителя,{{parent_telephone_number}},,1
@@ -12,6 +13,7 @@ Administrator,Место жительства родителя,{{parent_place_of
 Administrator,Серия паспорта родителя,{{parent_passport_series}},,1
 Administrator,Номер паспорта родителя,{{parent_passport_number}},,1
 Administrator,Дата выдачи паспорта родителя,{{parent_passport_date_of_issue}},,1
+Administrator,Орган выдавший паспорт родителя,{{parent_authority_issued_passport}},,1
 
 Administrator,Свидетельство о рождении,{{birth_certificate}},,1
 Administrator,Дата рождения,{{birth_date}},,1
@@ -20,6 +22,7 @@ Administrator,Полис обязательного медицинского с�
 
 Administrator,ФИО в родительном падеже,{{full_name_in_genitive_case}},,0
 Administrator,ФИО родителя в родительном падеже,{{parent_full_name_in_genitive_case}},ФИО родителя (законного представителя) в родительном падеже,0
-Administrator,Часы / дни недели,{{hours_and_weekdays}},Часы и дни занятий согласно утвержденному расписанию,0
 Administrator,Школа / класс,{{school_and_class}},,0
 Administrator,Название выбранной программы,{{kvantorium_program_type}},,0
+Administrator,Дни недели,{{weekdays}},,0
+Administrator,Часы,{{hours}},,0
