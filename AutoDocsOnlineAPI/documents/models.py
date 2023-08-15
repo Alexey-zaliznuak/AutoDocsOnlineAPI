@@ -2,13 +2,17 @@ import uuid
 
 from django.conf import settings
 from django.core.validators import MinLengthValidator
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from core.utils import make_documents_directory_path, short
 from core.models import CreatedModel
 from users.models import User
 
-from .validators import NameInDocumentRegexValidator
+from .validators import (
+    NameInDocumentRegexValidator,
+    validate_title_not_same_in_official_templates
+)
 
 
 class Template(models.Model):
@@ -21,8 +25,10 @@ class Template(models.Model):
     title = models.CharField(
         "title",
         max_length=settings.TEMPLATE_TITLE_MAX_LENGTH,
-        validators=[MinLengthValidator(settings.TEMPLATE_TITLE_MIN_LENGTH)],
-        unique=True
+        validators=[
+            MinLengthValidator(settings.TEMPLATE_TITLE_MIN_LENGTH),
+            validate_title_not_same_in_official_templates
+        ],
     )
     name_in_document = models.CharField(
         "template name in document",
@@ -54,6 +60,12 @@ class Template(models.Model):
         ordering = ["-title"]
         verbose_name = 'Template'
         verbose_name_plural = "Templates"
+
+    def clean(self):
+        if Template.objects.filter(
+            author=self.author, title=self.title
+        ).exists():
+            raise ValidationError("You already have Template with this title")
 
     def __str__(self):
         return self.title
