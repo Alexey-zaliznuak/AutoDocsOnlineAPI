@@ -1,28 +1,32 @@
 author,title,name_in_document,description,is_official
+
 Administrator,ФИО,{{full_name}},"""Фамилия, имя и отчество""",1
 Administrator,Телефон,{{telephone_number}},Номер телфона,1
 Administrator,Место жительства,{{place_of_residence}},,1
+Administrator,Дата рождения,{{birth_date}},,1
+Administrator,Место рождения,{{birth_place}},,1
+
 Administrator,Серия паспорта,{{passport_series}},,1
 Administrator,Номер паспорта,{{passport_number}},,1
 Administrator,Дата выдачи паспорта,{{passport_date_of_issue}},,1
 Administrator,Орган выдавший паспорт,{{authority_issued_passport}},,1
-
-Administrator,ФИО родителя,{{parent_full_name}},ФИО родителя (законного представителя),1
-Administrator,Телефон родителя,{{parent_telephone_number}},,1
-Administrator,Место жительства родителя,{{parent_place_of_residence}},,1
-Administrator,Серия паспорта родителя,{{parent_passport_series}},,1
-Administrator,Номер паспорта родителя,{{parent_passport_number}},,1
-Administrator,Дата выдачи паспорта родителя,{{parent_passport_date_of_issue}},,1
-Administrator,Орган выдавший паспорт родителя,{{parent_authority_issued_passport}},,1
-
+Administrator,СНИЛС,{{snils}},,1
+Administrator,ИНН,{{inn}},,1
 Administrator,Свидетельство о рождении,{{birth_certificate}},,1
-Administrator,Дата рождения,{{birth_date}},,1
 Administrator,Номер сертификата дополнительного образования,{{additional_education_certificate}},Номер сертификата дополнительного образования(номер/выдан),1
 Administrator,Полис обязательного медицинского страхования,{{compulsory_medical_insurance_policy}},Полис обязательного медицинского страхования(номер/выдано),1
 
 Administrator,ФИО в родительном падеже,{{full_name_in_genitive_case}},,0
-Administrator,ФИО родителя в родительном падеже,{{parent_full_name_in_genitive_case}},ФИО родителя (законного представителя) в родительном падеже,0
-Administrator,Школа / класс,{{school_and_class}},,0
-Administrator,Название выбранной программы,{{kvantorium_program_type}},указать выбранное направление обучения: 'Автоквантум'; 'Наноквантум'; 'Промробоквантум'; 'Энерджиквантум'; 'Хайтек'; 'IT-квантум',0
-Administrator,Дни недели,{{weekdays}},,0
-Administrator,Часы,{{hours}},,0
+
+Administrator,Дни недели,{{kvantorium_lessons_weekdays}},пн-чт / вт-пт / ср-сб,0
+Administrator,Часы занятий,{{kvantorium_lessons_hours}},9:00 / 14:00 / 16:00 / 18:00,0
+Administrator,Номер сертификата дополнительного образования поступающего,{{kvantorium_student_additional_education_certificate}},Номер сертификата дополнительного образования(номер/выдан),0
+Administrator,ФИО поступающего,{{kvantorium_student_full_name}},,0
+Administrator,Дата рождения поступающего,{{kvantorium_student_birth_date}},,0
+Administrator,Место жительства поступающего,{{kvantorium_sudent_place_of_residence}},,0
+Administrator,Телефон поступающего,{{kvantorium_sudent_telephone_number}},,0
+Administrator,Школа / класс поступающего,{{kvantorium_sudent_school_and_class}},,0
+Administrator,Свидетельство о рождении поступающего,{{kvantorium_sudent_birth_certificate}},,0
+Administrator,Полис обязательного мед. страхования поступающего,{{kvantorium_sudent_compulsory_medical_insurance_policy}},,0
+Administrator,Название выбранной программы,{{kvantorium_program_type}},Указать выбранное направление обучения: 'Автоквантум'; 'Наноквантум'; 'Промробоквантум'; 'Энерджиквантум'; 'Хайтек'; 'IT-квантум',0
+Administrator,ФИО поступающего в родительном падеже,{{kvantorium_student_full_name_in_genitive_case}},,0
