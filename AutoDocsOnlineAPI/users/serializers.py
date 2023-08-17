@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from rest_framework import serializers
 
 from .models import User
+from .validators import CustomUnicodeUsernameValidator
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class SignUpSerializer(serializers.Serializer):
     username = serializers.CharField(
-        validators=(UnicodeUsernameValidator,),
+        validators=(CustomUnicodeUsernameValidator(),),
         max_length=settings.USER_USERNAME_MAX_LENGTH
     )
     email = serializers.EmailField(max_length=settings.USER_EMAIL_MAX_LENGTH)

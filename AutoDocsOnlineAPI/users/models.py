@@ -7,6 +7,8 @@ from django.core.validators import MinLengthValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from .validators import CustomUnicodeUsernameValidator
+
 
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
@@ -19,7 +21,7 @@ class User(AbstractUser):
             'Letters, digits and @/./+/-/_ only.'
         ),
         validators=[
-            AbstractUser.username_validator,
+            CustomUnicodeUsernameValidator(),
             MinLengthValidator(settings.USER_USERNAME_MIN_LENGTH)
         ],
         error_messages={
