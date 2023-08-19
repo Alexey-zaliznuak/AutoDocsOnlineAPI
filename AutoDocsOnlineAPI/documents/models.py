@@ -117,6 +117,15 @@ class UserDefaultTemplateValue(models.Model):
     def __str__(self):
         return ' '.join(map(str, [self.user, self.template_value]))
 
+    def clean(self) -> None:
+        if UserDefaultTemplateValue.objects.filter(
+            user=self.user,
+            template_value__template=self.template_value.template
+        ):
+            raise ValidationError(
+                'You already have default value for this template.'
+            )
+
 
 class Document(CreatedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
