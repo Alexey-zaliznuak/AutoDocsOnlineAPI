@@ -150,6 +150,7 @@ class Document(CreatedModel):
     class Meta:
         verbose_name = 'Document'
         verbose_name_plural = "Documents"
+        ordering = ['creation_date']
 
     def __str__(self):
         return ' '.join(map(str, [self.author, self.title]))
@@ -285,3 +286,7 @@ class RecordTemplateValue(models.Model):
         models.CASCADE,
         related_name='records'
     )
+
+    class Meta:
+        verbose_name = 'RecordTemplateValue'
+        verbose_name_plural = "RecordTemplateValue"
