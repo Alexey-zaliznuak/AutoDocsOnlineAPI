@@ -163,6 +163,7 @@ class DocumentsPackageAdmin(admin.ModelAdmin):
         'title_',
         'author',
         'documents_',
+        'description_',
         'pk',
     )
     search_fields = ('title', 'author__username',)
@@ -177,6 +178,10 @@ class DocumentsPackageAdmin(admin.ModelAdmin):
         return mark_safe(
             HTML_NEW_LINE.join(map(object_url, obj.documents.all()))
         )
+
+    @admin.display(empty_value='unknown', description="description")
+    def description_(self, obj):
+        return short(obj.description)
 
 
 @admin.register(DocumentDocumentsPackage)

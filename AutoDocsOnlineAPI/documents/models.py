@@ -172,6 +172,11 @@ class DocumentsPackage(models.Model):
     documents = models.ManyToManyField(
         Document, through='DocumentDocumentsPackage'
     )
+    description = models.TextField(
+        'description',
+        max_length=settings.DOCUMENTS_PACKAGE_DESCRIPTION_MAX_LENGTH,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = 'Documents package'

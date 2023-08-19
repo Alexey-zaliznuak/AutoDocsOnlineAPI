@@ -187,6 +187,7 @@ class GetDocumentsPackageSerializer(serializers.ModelSerializer):
             'title',
             'author',
             'documents',
+            'description',
         )
 
 
@@ -202,6 +203,7 @@ class CreateUpdateDocumentsPackageSerializer(ModelWithUpdateForM2MFields):
             'title',
             'author',
             'documents',
+            'description',
         )
         read_only_fields = (
             'id',
