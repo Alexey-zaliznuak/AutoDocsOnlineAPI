@@ -12,6 +12,7 @@ from core.utils import make_confirm_code
 from .models import User
 from .permissions import EmailConfirmed
 from .serializers import (
+    AccountStatusSerializer,
     ChangePasswordSerializer,
     SendConfirmCodeSerializer,
     SignUpSerializer,
@@ -139,6 +140,22 @@ class AUTHApiView(viewsets.ViewSet):
         user.save()
 
         return Response(request.data, status=status.HTTP_200_OK)
+
+    @action(["post"], False)
+    @swagger_auto_schema(
+        request_body=AccountStatusSerializer,
+        operation_description=(
+            "Return status of account. \n"
+            "400 - account not active or does not exist, "
+            "the reason is in the body. \n"
+            "200 - account with this username exists and it`s email confirmed."
+        )
+    )
+    def account_status(self, request):
+        serializer = AccountStatusSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        return Response(status=status.HTTP_200_OK)
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):

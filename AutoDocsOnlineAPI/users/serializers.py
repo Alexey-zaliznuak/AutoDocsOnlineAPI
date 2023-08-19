@@ -113,3 +113,25 @@ class ChangePasswordSerializer(serializers.Serializer):
     """
     current_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
+
+
+class AccountStatusSerializer(serializers.Serializer):
+    username = serializers.CharField(
+        validators=(CustomUnicodeUsernameValidator(),),
+        max_length=settings.USER_USERNAME_MAX_LENGTH
+    )
+
+    def validate(self, data):
+        user = User.objects.filter(username=data.get('username'))
+
+        if not user.exists():
+            raise ValidationError('User with this username does not exists.')
+
+        user = user.get()
+
+        if not user.email_confirmed:
+            raise ValidationError(
+                'User with this username have not confirmed email.'
+            )
+
+        return data
