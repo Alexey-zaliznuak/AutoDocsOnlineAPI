@@ -1,13 +1,13 @@
-from core.email import send_confirm_code
-from core.pagination import StandardResultsSetPagination
-from core.utils import make_confirm_code
 from djoser.permissions import CurrentUserOrAdminOrReadOnly
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import filters, mixins, status, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+from core.email import send_confirm_code
+from core.utils import make_confirm_code
 
 from .models import User
 from .permissions import EmailConfirmed
@@ -31,8 +31,6 @@ class UserViewSet(UserMixin):
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated, CurrentUserOrAdminOrReadOnly)
     serializer_class = UserSerializer
-    filter_backends = (filters.SearchFilter, )
-    pagination_class = StandardResultsSetPagination
     lookup_field = 'username'
     http_method_names = ['get', 'post', 'patch']
 
@@ -84,12 +82,13 @@ class AUTHApiView(viewsets.ViewSet):
     @action(methods=["post"], detail=False)
     @swagger_auto_schema(
         request_body=SignUpSerializer,
-        operation_description="""
-        User registration.
-        After register, You should request code on 'auth/send_confirm_code'.
-        You can`t use your account until you confirm your email.
-        To confirm the email, see 'auth/confirm_email'.
-        """,
+        operation_description=(
+            "User registration. "
+            "After register, "
+            "You should request code on 'auth/send_confirm_code'. "
+            "You can`t use your account until you confirm your email. "
+            "To confirm the email, see 'auth/confirm_email'. "
+        ),
     )
     def signup(self, request):
         serializer = SignUpSerializer(data=request.data)

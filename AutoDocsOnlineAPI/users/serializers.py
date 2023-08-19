@@ -27,14 +27,6 @@ class SignUpSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=settings.USER_EMAIL_MAX_LENGTH)
     password = serializers.CharField()
 
-    class Meta:
-        model = User
-        fields = (
-            'username',
-            'email',
-            'password',
-        )
-
     def validate_username(sef, value):
         if value == 'me':
             raise ValidationError('uncorrect username')
