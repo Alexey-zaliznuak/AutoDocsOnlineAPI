@@ -6,6 +6,7 @@ from core.admin import object_url
 from core.utils import short
 
 from .models import (
+    Category,
     Template,
     TemplateValue,
     Record,
@@ -40,22 +41,41 @@ class RecordTemplateValueInline(admin.TabularInline):
     extra = 1
 
 
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = (
+        'title',
+        'description_',
+        'pk'
+    )
+    search_fields = (
+        'title',
+        'description',
+    )
+    empty_value_display = '-empty-'
+
+    @admin.display(empty_value='unknown', description="description")
+    def description_(self, obj):
+        return short(obj.description)
+
+
 @admin.register(Template)
 class TemplateAdmin(admin.ModelAdmin):
     list_display = (
         'title',
         'author_',
         'name_in_document',
+        'category_',
         'is_official',
         'description_',
         'pk'
     )
-    list_filter = ('is_official',)
+    list_filter = ('is_official', 'category__title')
     search_fields = (
         'title',
         'name_in_document',
         'description',
-        'author__username'
+        'author__username',
     )
     empty_value_display = '-empty-'
 
@@ -66,6 +86,10 @@ class TemplateAdmin(admin.ModelAdmin):
     @admin.display(empty_value='unknown', description="author")
     def author_(self, obj):
         return object_url(obj.author)
+
+    @admin.display(empty_value='unknown', description="category")
+    def category_(self, obj):
+        return object_url(obj.category)
 
 
 @admin.register(TemplateValue)

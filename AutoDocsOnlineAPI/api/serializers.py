@@ -15,6 +15,9 @@ from users.serializers import UserSerializer
 
 
 class TemplateSerializer(serializers.ModelSerializer):
+    category = serializers.StringRelatedField()
+    author = serializers.SlugRelatedField('username', read_only=True)
+
     class Meta:
         model = Template
         fields = (
@@ -24,12 +27,16 @@ class TemplateSerializer(serializers.ModelSerializer):
             'description',
             'is_official',
             'name_in_document',
+            'category',
         )
-        read_only_fields = ('id', 'author', 'is_official',)
+        read_only_fields = ('id', 'author', 'is_official', 'category')
 
 
 class GetDocumentTemplateSerializer(TemplateSerializer):
-    "The same as TemplateSerializer but do not have author field."
+    """
+    The same as TemplateSerializer
+    but contains only fields useful in DocumentSerializer.
+    """
     class Meta:
         model = Template
         fields = (

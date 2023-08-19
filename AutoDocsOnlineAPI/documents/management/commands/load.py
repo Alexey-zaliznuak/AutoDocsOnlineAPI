@@ -1,9 +1,12 @@
-import pandas as pd
 from os import getenv as env
-from django.core.management.base import BaseCommand
-from users.models import User
-from documents.models import Template
 from pathlib import PurePath
+
+import pandas as pd
+from django.core.management.base import BaseCommand
+
+from documents.models import Category, Template
+from users.models import User
+
 
 DATA_DIR = PurePath(__file__).parent / 'data'
 ROWS_NAMES_INDEX = 1
@@ -38,13 +41,13 @@ def clear_row(row):
 
 
 class Command(BaseCommand):
-    objects_list = ['templates']
+    objects_list = ['templates', 'categories']
 
     def handle(self, **options):
         check_admin_exists()
 
         for obj in self.objects_list:
-            if obj in options.keys():
+            if options[obj]:
                 self.__getattribute__('load_' + obj)()
                 print(f'import {obj} completed successfully')
 
@@ -60,7 +63,9 @@ class Command(BaseCommand):
     def load_model(self, model, csv_path=None):
         "For easy loads simple models."
 
-        csv = loadcsv(csv_path or DATA_DIR / model.__class__.__name__.lower())
+        csv = loadcsv(
+            csv_path or DATA_DIR / model._meta.verbose_name_plural.lower()
+        )
         rows_names = csv.axes[ROWS_NAMES_INDEX]
 
         data = [
@@ -79,6 +84,9 @@ class Command(BaseCommand):
             if key == 'author':
                 return User.objects.get(username=row[key])
 
+            if key == 'category':
+                return Category.objects.get(title=row[key])
+
             if key == 'description' and not row[key]:
                 return row['title']
 
@@ -95,3 +103,6 @@ class Command(BaseCommand):
         ]
 
         Template.objects.bulk_create(data)
+
+    def load_categories(self):
+        self.load_model(Category, DATA_DIR / 'categories')

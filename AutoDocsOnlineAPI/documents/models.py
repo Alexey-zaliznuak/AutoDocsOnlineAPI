@@ -9,10 +9,26 @@ from core.utils import make_documents_directory_path, short
 from core.models import CreatedModel
 from users.models import User
 
-from .validators import (
-    NameInDocumentRegexValidator,
-    validate_title_not_same_in_official_templates
-)
+from .validators import NameInDocumentRegexValidator
+
+
+class Category(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(
+        max_length=settings.CATEGORY_TITLE_MAX_LENGTH,
+        unique=True
+    )
+    description = models.TextField(
+        max_length=settings.CATEGORY_DESCRIPTION_MAX_LENGTH
+    )
+
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+        ordering = ['-title']
+
+    def __str__(self):
+        return self.title
 
 
 class Template(models.Model):
@@ -27,7 +43,6 @@ class Template(models.Model):
         max_length=settings.TEMPLATE_TITLE_MAX_LENGTH,
         validators=[
             MinLengthValidator(settings.TEMPLATE_TITLE_MIN_LENGTH),
-            validate_title_not_same_in_official_templates
         ],
     )
     name_in_document = models.CharField(
@@ -50,6 +65,13 @@ class Template(models.Model):
         max_length=settings.TEMPLATE_DESCRIPTION_MAX_LENGTH,
         blank=True,
     )
+    category = models.ForeignKey(
+        Category,
+        related_name='templates',
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+    )
     is_official = models.BooleanField(
         'official tag',
         blank=True,
@@ -62,10 +84,31 @@ class Template(models.Model):
         verbose_name_plural = "Templates"
 
     def clean(self):
-        if Template.objects.filter(
+        # category
+        if not self.is_official and self.category:
+            raise ValidationError(
+                'Only official templates can belong to category.'
+            )
+
+        if self.is_official and not self.category:
+            "If not belong to category it should have 'Other' category."
+            self.category, _ = Category.objects.get_or_create(
+                title=settings.CATEGORY_OTHER_TITLE
+            )
+
+        # title
+        template = Template.objects.filter(
             author=self.author, title=self.title
-        ).exists():
-            raise ValidationError("You already have Template with this title")
+        )
+        if template.exists() and self != template.get():
+            raise ValidationError("You already have Template with this title.")
+
+        template = Template.objects.filter(is_official=True, title=self.title)
+        if template.exists() and self != template.get():
+            raise ValidationError(
+                "This title already exists in official template,"
+                " you should use official templates instead create new."
+            )
 
     def __str__(self):
         return self.title

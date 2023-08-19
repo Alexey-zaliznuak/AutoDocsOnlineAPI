@@ -1,19 +1,19 @@
-author,title,name_in_document,description,is_official
+author,title,name_in_document,description,category,is_official
 
-Administrator,ФИО,{{full_name}},"""Фамилия, имя и отчество""",1
-Administrator,Телефон,{{telephone_number}},Номер телфона,1
-Administrator,Место жительства,{{place_of_residence}},,1
-Administrator,Дата рождения,{{birth_date}},,1
-Administrator,Место рождения,{{birth_place}},,1
+Administrator,ФИО,{{full_name}},"""Фамилия, имя и отчество""",Main information,1
+Administrator,Телефон,{{telephone_number}},Номер телфона,Main information,1
+Administrator,Место жительства,{{place_of_residence}},,Main information,1
+Administrator,Дата рождения,{{birth_date}},,Main information,1
+Administrator,Место рождения,{{birth_place}},,Main information,1
 
-Administrator,Серия паспорта,{{passport_series}},,1
-Administrator,Номер паспорта,{{passport_number}},,1
-Administrator,Дата выдачи паспорта,{{passport_date_of_issue}},,1
-Administrator,Орган выдавший паспорт,{{authority_issued_passport}},,1
-Administrator,СНИЛС,{{snils}},,1
-Administrator,ИНН,{{inn}},,1
-Administrator,Свидетельство о рождении,{{birth_certificate}},,1
-Administrator,Номер сертификата дополнительного образования,{{additional_education_certificate}},Номер сертификата дополнительного образования(номер/выдан),1
-Administrator,Полис обязательного медицинского страхования,{{compulsory_medical_insurance_policy}},Полис обязательного медицинского страхования(номер/выдано),1
+Administrator,Серия паспорта,{{passport_series}},,Personal documents,1
+Administrator,Номер паспорта,{{passport_number}},,Personal documents,1
+Administrator,Дата выдачи паспорта,{{passport_date_of_issue}},,Personal documents,1
+Administrator,Орган выдавший паспорт,{{authority_issued_passport}},,Personal documents,1
+Administrator,СНИЛС,{{snils}},,Personal documents,1
+Administrator,ИНН,{{inn}},,Personal documents,1
+Administrator,Свидетельство о рождении,{{birth_certificate}},,Personal documents,1
+Administrator,Номер сертификата дополнительного образования,{{additional_education_certificate}},Номер сертификата дополнительного образования(номер/выдан),Personal documents,1
+Administrator,Полис обязательного медицинского страхования,{{compulsory_medical_insurance_policy}},Полис обязательного медицинского страхования(номер/выдано),Personal documents,1
 
-Administrator,ФИО в родительном падеже,{{full_name_in_genitive_case}},,0
+Administrator,ФИО в родительном падеже,{{full_name_in_genitive_case}},,Other,0
