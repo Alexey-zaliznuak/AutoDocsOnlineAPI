@@ -204,7 +204,7 @@ class CreateUpdateDocumentsPackageSerializer(ModelWithUpdateForM2MFields):
             'documents',
         )
         read_only_fields = (
-            'id'
+            'id',
             'author',
         )
 
