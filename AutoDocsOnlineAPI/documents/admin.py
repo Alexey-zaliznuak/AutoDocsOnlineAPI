@@ -89,7 +89,8 @@ class TemplateAdmin(admin.ModelAdmin):
 
     @admin.display(empty_value='unknown', description="category")
     def category_(self, obj):
-        return object_url(obj.category)
+        if obj.category:
+            return object_url(obj.category)
 
 
 @admin.register(TemplateValue)
