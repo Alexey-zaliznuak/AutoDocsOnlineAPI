@@ -52,6 +52,7 @@ class GetDocumentTemplateSerializer(TemplateSerializer):
 class GetDocumentSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     templates = GetDocumentTemplateSerializer(many=True)
+    file = serializers.CharField(source='file.url')
 
     class Meta:
         model = Document
@@ -171,6 +172,7 @@ class CreateUpdateUserDefaultTemplateValueSerializer(
 
 class GetDocumentsPackageDocumentSerializer(serializers.ModelSerializer):
     templates = GetDocumentTemplateSerializer(many=True)
+    file = serializers.CharField(source='file.url')
 
     class Meta:
         model = Document
