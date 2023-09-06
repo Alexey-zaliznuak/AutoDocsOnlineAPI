@@ -89,6 +89,12 @@ class DocumentsFormatter:
                             chars_found = 0
                             check_length = len(inline[i].text)
                             for text_index in range(0, check_length):
+                                print(key, 'key', flush=True)
+                                print(key_index, 'key_index', flush=True)
+                                print(text, 'text', flush=True)
+                                print(text_index, 'text-index', flush=True)
+                                print(inline, 'inline', flush=True)
+                                print(i, 'i', flush=True)
                                 if (
                                     inline[i]
                                     .text[text_index] == key[key_index]
