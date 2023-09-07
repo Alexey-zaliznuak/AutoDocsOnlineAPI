@@ -72,11 +72,13 @@ class DocumentsFormatter:
                             for text_index in range(0, check_length):
                                 if inline[i].text[text_index] == key[key_index]:
                                     key_index += 1
+                                    print('key index up ->', key_index)
                                     chars_found += 1
                                 else:
                                     break
                             # no match so must be end
                             found_runs.append((i, 0, chars_found))
+                            print('key index, len key', key_index, len(key))
                             if key_index == len(key):
                                 found_all = True
                                 break
