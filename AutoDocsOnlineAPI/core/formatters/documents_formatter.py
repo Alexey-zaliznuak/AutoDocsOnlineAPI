@@ -91,7 +91,7 @@ class DocumentsFormatter:
                             for text_index in range(0, check_length):
                                 print(key, 'key', flush=True)
                                 print(key_index, 'key_index', flush=True)
-                                print(text, 'text', flush=True)
+                                print(inline[i].text, 'text', flush=True)
                                 print(text_index, 'text-index', flush=True)
                                 print(inline, 'inline', flush=True)
                                 print(i, 'i', flush=True)
