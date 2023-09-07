@@ -89,13 +89,11 @@ class DocumentsFormatter:
                             chars_found = 0
                             check_length = len(inline[i].text)
                             for text_index in range(0, check_length):
-
-                                print(key, 'key', flush=True)
-                                print(key_index, 'key_index', flush=True)
-
                                 try:
                                     print(key[key_index], 'key by key index', flush=True)
                                 except Exception as e:
+                                    print(key, 'key', flush=True)
+                                    print(key_index, 'key_index', flush=True)
                                     print(e, flush=True)
 
                                 print('\n'*3)
