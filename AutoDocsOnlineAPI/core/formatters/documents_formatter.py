@@ -51,16 +51,10 @@ class DocumentsFormatter:
                             # check sequence
                             start_index = inline[i].text.find(key[key_index])
                             check_length = len(inline[i].text)
-                            try:
-                                for text_index in range(start_index, check_length):
-                                    if inline[i].text[text_index] != key[key_index]:
-                                        # no match so must be false positive
-                                        break
-
-                            except Exception as e:
-                                print('key -', key)
-                                print('key index -', key_index)
-                                raise Exception(e)
+                            for text_index in range(start_index, check_length):
+                                if inline[i].text[text_index] != key[key_index]:
+                                    # no match so must be false positive
+                                    break
 
                             if key_index == 0:
                                 started = True
@@ -70,6 +64,7 @@ class DocumentsFormatter:
                             if key_index != len(key):
                                 continue
                             else:
+                                print('found all is true(67 line), break')
                                 # found all chars in key
                                 found_all = True
                                 break
@@ -80,12 +75,18 @@ class DocumentsFormatter:
                             chars_found = 0
                             check_length = len(inline[i].text)
                             for text_index in range(0, check_length):
-                                if inline[i].text[text_index] == key[key_index]:
-                                    key_index += 1
-                                    print('key index up ->', key_index, flush=True)
-                                    chars_found += 1
-                                else:
-                                    break
+                                try:
+                                    if inline[i].text[text_index] == key[key_index]:
+                                        key_index += 1
+                                        print('key index up ->', key_index, flush=True)
+                                        chars_found += 1
+                                    else:
+                                        break
+                                except Exception as e:
+                                    print('key -', key)
+                                    print('key index -', key_index)
+                                    raise Exception(e)
+
                             # no match so must be end
                             found_runs.append((i, 0, chars_found))
                             print('key index, len key', key_index, len(key), flush=True)

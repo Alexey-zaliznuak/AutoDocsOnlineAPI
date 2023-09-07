@@ -7,7 +7,7 @@ class EmailConfirmed(permissions.BasePermission):
     Get user by username and return True if he confirmed email
     """
 
-    message = 'You have not confirmed your email.'
+    message = 'Account with this username and confirmed email not found.'
 
     def has_permission(self, request, view):
         q = User.objects.filter(username=request.data.get('username'))
