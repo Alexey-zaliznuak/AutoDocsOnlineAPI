@@ -92,13 +92,12 @@ class DocumentsFormatter:
 
                                 print(key, 'key', flush=True)
                                 print(key_index, 'key_index', flush=True)
-                                print(inline[i].text, 'text', flush=True)
-                                print(text_index, 'text-index', flush=True)
-                                print(inline, 'inline', flush=True)
-                                print(i, 'i', flush=True)
-                                print(len(inline[i].text), 'len text', flush=True)
-                                print(inline[i].text[text_index], 'char by index', flush=True)
-                                print(key[key_index], 'key by key index', flush=True)
+
+                                try:
+                                    print(key[key_index], 'key by key index', flush=True)
+                                except Exception as e:
+                                    print(e, flush=True)
+
                                 print('\n'*3)
 
                                 if inline[i].text[text_index] == key[key_index]:
