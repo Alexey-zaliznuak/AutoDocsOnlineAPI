@@ -17,8 +17,8 @@ class DocumentsFormatter:
         for p in self.all_paragraphs:
             for key, val in self.data.items():
                 if key in p.text:
-                    print('\n' * 10)
-                    print('Start find new key -', key)
+                    print('\n' * 10, flush=True)
+                    print('Start find new key -', key, flush=True)
                     inline = p.runs
                     # Replace strings and retain the same style.
                     # The text to be replaced can be split over several runs so
@@ -88,6 +88,7 @@ class DocumentsFormatter:
                                 break
 
                     if found_all and not replace_done:
+                        print('replace', flush=True)
                         for i, item in enumerate(found_runs):
                             index, start, length = [t for t in item]
                             if i == 0:
@@ -96,6 +97,8 @@ class DocumentsFormatter:
                             else:
                                 text = inline[index].text.replace(inline[index].text[start:start + length], '')
                                 inline[index].text = text
+                    else:
+                        print('not replace', flush=True)
 
         file_stream = BytesIO()
         self.document.save(file_stream)
