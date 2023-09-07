@@ -96,13 +96,17 @@ class DocumentsFormatter:
                                     print(key_index, 'key_index', flush=True)
                                     print(e, flush=True)
 
-                                print('\n'*3)
-
-                                if inline[i].text[text_index] == key[key_index]:
-                                    key_index += 1
-                                    chars_found += 1
-                                else:
-                                    break
+                                print('\n'*3, flush=True)
+                                try:
+                                    if inline[i].text[text_index] == key[key_index]:
+                                        key_index += 1
+                                        chars_found += 1
+                                    else:
+                                        break
+                                except Exception as e:
+                                    raise RuntimeError(
+                                        f"key - '{key}'\nkey_index - '{key_index}'"
+                                    )
                             # no match so must be end
                             found_runs.append((i, 0, chars_found))
                             if key_index == len(key):
