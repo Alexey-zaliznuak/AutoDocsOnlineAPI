@@ -17,6 +17,7 @@ class DocumentsFormatter:
         for p in self.all_paragraphs:
             for key, val in self.data.items():
                 if key in p.text:
+                    print('\n' * 10)
                     inline = p.runs
                     # Replace strings and retain the same style.
                     # The text to be replaced can be split over several runs so
@@ -72,13 +73,13 @@ class DocumentsFormatter:
                             for text_index in range(0, check_length):
                                 if inline[i].text[text_index] == key[key_index]:
                                     key_index += 1
-                                    print('key index up ->', key_index)
+                                    print('key index up ->', key_index, flush=True)
                                     chars_found += 1
                                 else:
                                     break
                             # no match so must be end
                             found_runs.append((i, 0, chars_found))
-                            print('key index, len key', key_index, len(key))
+                            print('key index, len key', key_index, len(key), flush=True)
                             if key_index == len(key):
                                 found_all = True
                                 break

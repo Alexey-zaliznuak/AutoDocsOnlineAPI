@@ -106,7 +106,7 @@ jobs:
           sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
 
           # clear
-          sudo docker system prune --all --force
+          # sudo docker system prune --all --force
 
   send_message:
     runs-on: ubuntu-latest
