@@ -14,6 +14,7 @@ class DocumentsFormatter:
         )
 
     def format(self) -> BytesIO:
+        print(self.data)
         for p in self.all_paragraphs:
             for key, val in self.data.items():
                 if key in p.text:
@@ -31,7 +32,7 @@ class DocumentsFormatter:
                     found_all = False
                     replace_done = False
                     for i in range(len(inline)):
-
+                        print('start new inline', flush=True)
                         # case 1: found in single run so short circuit the replace
                         if key in inline[i].text and not started:
                             found_runs.append((i, inline[i].text.find(key), len(key)))
@@ -50,10 +51,17 @@ class DocumentsFormatter:
                             # check sequence
                             start_index = inline[i].text.find(key[key_index])
                             check_length = len(inline[i].text)
-                            for text_index in range(start_index, check_length):
-                                if inline[i].text[text_index] != key[key_index]:
-                                    # no match so must be false positive
-                                    break
+                            try:
+                                for text_index in range(start_index, check_length):
+                                    if inline[i].text[text_index] != key[key_index]:
+                                        # no match so must be false positive
+                                        break
+
+                            except Exception as e:
+                                print('key -', key)
+                                print('key index -', key_index)
+                                raise Exception(e)
+
                             if key_index == 0:
                                 started = True
                             chars_found = check_length - start_index
