@@ -89,16 +89,19 @@ class DocumentsFormatter:
                             chars_found = 0
                             check_length = len(inline[i].text)
                             for text_index in range(0, check_length):
+
                                 print(key, 'key', flush=True)
                                 print(key_index, 'key_index', flush=True)
                                 print(inline[i].text, 'text', flush=True)
                                 print(text_index, 'text-index', flush=True)
                                 print(inline, 'inline', flush=True)
                                 print(i, 'i', flush=True)
-                                if (
-                                    inline[i]
-                                    .text[text_index] == key[key_index]
-                                ):
+                                print(len(inline[i].text), 'len text', flush=True)
+                                print(inline[i].text[text_index], 'char by index', flush=True)
+                                print(key[key_index], 'key by key index', flush=True)
+                                print('\n'*3)
+
+                                if inline[i].text[text_index] == key[key_index]:
                                     key_index += 1
                                     chars_found += 1
                                 else:
@@ -114,23 +117,14 @@ class DocumentsFormatter:
                             index, start, length = [t for t in item]
                             if i == 0:
                                 text = (
-                                    inline[index].text
-                                    .replace(
-                                        inline[index]
-                                        .text[start:start + length],
-
-                                        str(value))
+                                    inline[index].text.replace(inline[index].text[start:start + length],
+                                    str(value))
                                 )
                                 inline[index].text = text
                             else:
-                                text = (
-                                    inline[index].text
-                                    .replace(
-                                        inline[index]
-                                        .text[start:start + length],
-
-                                        ''
-                                    )
+                                text = inline[index].text.replace(
+                                    inline[index].text[start:start + length],
+                                    ''
                                 )
                                 inline[index].text = text
 
