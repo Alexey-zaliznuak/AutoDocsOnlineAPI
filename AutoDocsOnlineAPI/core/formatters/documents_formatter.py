@@ -18,6 +18,7 @@ class DocumentsFormatter:
             for key, val in self.data.items():
                 if key in p.text:
                     print('\n' * 10)
+                    print('Start find new key -', key)
                     inline = p.runs
                     # Replace strings and retain the same style.
                     # The text to be replaced can be split over several runs so
@@ -82,6 +83,8 @@ class DocumentsFormatter:
                             print('key index, len key', key_index, len(key), flush=True)
                             if key_index == len(key):
                                 found_all = True
+                                print('found all is true', flush=True)
+                                print('replace done is', replace_done, flush=True)
                                 break
 
                     if found_all and not replace_done:
