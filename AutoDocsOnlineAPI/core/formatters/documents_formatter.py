@@ -83,8 +83,8 @@ class DocumentsFormatter:
                                     else:
                                         break
                                 except Exception as e:
-                                    print('key -', key)
-                                    print('key index -', key_index)
+                                    print('key -', key, flush=True)
+                                    print('key index -', key_index, flush=True)
                                     raise Exception(e)
 
                             # no match so must be end
