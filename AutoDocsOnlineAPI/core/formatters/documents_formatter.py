@@ -85,7 +85,7 @@ class DocumentsFormatter:
                                 except Exception as e:
                                     print('key -', key, flush=True)
                                     print('key index -', key_index, flush=True)
-                                    raise Exception(e)
+                                    raise Exception(f'key - {key}\nkey-index = {key_index}')
 
                             # no match so must be end
                             found_runs.append((i, 0, chars_found))
