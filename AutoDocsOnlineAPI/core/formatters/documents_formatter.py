@@ -76,10 +76,10 @@ class DocumentsFormatter:
                             check_length = len(inline[i].text)
                             for text_index in range(0, check_length):
                                 try:
-                                    if inline[i].text[text_index] == key[key_index]:
+                                    if key_index != len(key) and inline[i].text[text_index] == key[key_index]:
                                         key_index += 1
-                                        print('key index up ->', key_index, flush=True)
                                         chars_found += 1
+                                        print('key index up ->', key_index, flush=True)
                                     else:
                                         break
                                 except Exception as e:
