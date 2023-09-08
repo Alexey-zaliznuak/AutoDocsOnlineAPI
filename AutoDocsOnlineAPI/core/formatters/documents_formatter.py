@@ -58,10 +58,7 @@ class DocumentsFormatter:
         print(self.data)
         for p in self.all_paragraphs:
             for key, val in self.data.items():
-                i = 0
                 while key in p.text:
-                    i += 1
-                    print(f'iter - {i}')
                     KeyChanger(p, key, val).replace()
 
         file_stream = BytesIO()
