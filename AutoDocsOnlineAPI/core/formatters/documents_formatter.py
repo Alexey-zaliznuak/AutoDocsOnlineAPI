@@ -63,7 +63,7 @@ class DocumentsFormatter:
         print(self.data)
         for p in self.all_paragraphs:
             for key, val in self.data.items():
-                for _ in range(100):
+                while key in p.text:
                     KeyChanger(p, key, val).replace()
 
                 # if key in p.text:
