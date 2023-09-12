@@ -55,7 +55,6 @@ class DocumentsFormatter:
         )
 
     def format(self) -> BytesIO:
-        print(self.data)
         for p in self.all_paragraphs:
             for key, val in self.data.items():
                 while key in p.text:
@@ -84,3 +83,4 @@ class DocumentsFormatter:
                         all_paragraphs.append(paragraph)
 
         return all_paragraphs
+
